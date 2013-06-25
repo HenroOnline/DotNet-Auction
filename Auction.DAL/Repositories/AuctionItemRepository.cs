@@ -9,11 +9,15 @@ namespace Auction.DAL.Repositories
 {
 		public class AuctionItemRepository : BaseRepository<AuctionItem, AuctionItemRepository>
 		{
-				public List<AuctionItem> ListOrderedByDate()
+				public List<AuctionItem> ListOrderedByDate(bool onlyNotExpiredItems = true)
 				{
 						var result = List();
 
-						return result.OrderByDescending(ai => ai.Date).ToList();
+						var currentDate = DateTime.Now.Date;
+						var daysValid = Config.Auction.DaysValid;
+
+						return result.Where(ai => !onlyNotExpiredItems || ai.Date.Date.AddDays(daysValid) >= currentDate)
+												 .OrderByDescending(ai => ai.Date).ToList();
 				}
 		}
 }

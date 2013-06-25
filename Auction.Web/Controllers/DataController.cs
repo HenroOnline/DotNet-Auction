@@ -21,7 +21,6 @@ namespace Auction.Web.Controllers
 				[System.Web.Mvc.HttpPost]
 				public HttpResponseMessage CreateAuctionItem(AuctionItem auctionItem)
 				{
-						//
 						AuctionItemRepository.Instance.Save(auctionItem);
 
 						return Request.CreateResponse<AuctionItem>(HttpStatusCode.Created, auctionItem);

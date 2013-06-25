@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuctionContext.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Configuration\AuctionItemBiddingConfiguration.cs" />
     <Compile Include="Configuration\AuctionItemConfiguration.cs" />
     <Compile Include="Configuration\BaseConfiguration.cs" />
