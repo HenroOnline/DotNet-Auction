@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Auction.DAL;
+using Auction.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auction.DAL.Repositories
+namespace Auction.BLL.Repositories
 {
 		public class BaseRepository<T, R>
-				where T : Entities.Base
+				where T : Base, new()
 				where R : BaseRepository<T, R>, new()
 		{
 				public AuctionContext Context
@@ -34,6 +36,11 @@ namespace Auction.DAL.Repositories
 				public BaseRepository()
 				{
 
+				}
+
+				public virtual T NewEntity()
+				{
+						return new T();
 				}
 
 				public T Select(int id)
@@ -72,5 +79,4 @@ namespace Auction.DAL.Repositories
 						Context.SaveChanges();
 				}
 		}
-
 }

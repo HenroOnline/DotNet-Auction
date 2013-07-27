@@ -1,5 +1,5 @@
-﻿using Auction.DAL.Entities;
-using Auction.DAL.Repositories;
+﻿using Auction.BLL.Repositories;
+using Auction.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Auction.Web.Controllers
 {
     public class DataController : ApiController
     {
-				public List<AuctionItem> GetAuctionItems()
+				public IEnumerable<AuctionItem> GetAuctionItems()
 				{
 						return AuctionItemRepository.Instance.ListOrderedByDate();
 				}

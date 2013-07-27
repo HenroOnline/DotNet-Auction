@@ -13,6 +13,6 @@ namespace Auction.DAL.Entities
 				public String ContentType { get; set; }
 				public Int32 SizeInBytes { get; set; }
 
-				public ICollection<AuctionItem> AuctionItems { get; set; }
+				public ICollection<FileAttachmentAuctionItem> FileAttachmentAuctionItems { get; set; }
 		}
 }

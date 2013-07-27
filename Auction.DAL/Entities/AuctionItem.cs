@@ -19,7 +19,7 @@ namespace Auction.DAL.Entities
 				public string VendorName { get; set; }
 
 				public string VendorStreet { get; set; }
-				public string VenderHouseNumber { get; set; }
+				public string VendorHouseNumber { get; set; }
 				public string VendorZipCode { get; set; }
 				public string VendorCity { get; set; }
 
@@ -29,6 +29,6 @@ namespace Auction.DAL.Entities
 
 				public ICollection<AuctionItemBidding> Biddings { get; set; }
 
-				public ICollection<FileAttachment> FileAttachments { get; set; }
+				public ICollection<FileAttachmentAuctionItem> FileAttachmentAuctionItems { get; set; }
 		}
 }

@@ -23,6 +23,7 @@ namespace Auction.DAL.Entities
 				public string BiddingPhoneNumber { get; set; }
 				public string BiddingMobileNumber { get; set; }
 
+				public int AuctionItemId { get; set; }
 				public AuctionItem AuctionItem { get; set; }
 		}
 }

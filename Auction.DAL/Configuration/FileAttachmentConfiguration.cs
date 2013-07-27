@@ -11,7 +11,10 @@ namespace Auction.DAL.Configuration
 		{
 				public FileAttachmentConfiguration()
 				{
-						this.HasMany(f => f.AuctionItems);
+						if (!string.IsNullOrEmpty(AuctionContext.SchemaName))
+						{
+								this.ToTable("FileAttachment", AuctionContext.SchemaName);
+						}
 				}
 		}
 }

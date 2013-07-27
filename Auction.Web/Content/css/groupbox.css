@@ -1,0 +1,81 @@
+﻿.item
+{
+	
+}
+
+.item .header, .item .header div
+{
+	height: 25px;
+}
+
+.item .header
+{
+	padding-left: 6px;
+	background-image: url(../img/groupbox/groupboxheaderleft.png);
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.item .header > div
+{
+	background-image: url(../img/groupbox/groupboxheadercontent.png);
+	background-repeat: repeat-x;
+	
+	font-weight: bold;
+	line-height: 25px;
+}
+.item .header div > div
+{
+	padding-right: 6px;
+	background-image: url(../img/groupbox/groupboxheaderright.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+
+	text-transform: uppercase;
+}
+
+
+
+.item .data
+{
+	padding-left: 6px;
+	background-image: url(../img/groupbox/groupboxcontentleft.png);
+	background-repeat: repeat-y;
+}
+.item .data > div
+{	
+	background-color: #F1F1F1;
+}
+.item .data > div > div
+{
+	padding-top: 4px;
+	padding-right: 6px;
+	background-image: url(../img/groupbox/groupboxcontentright.png);
+	background-position: right center;
+	background-repeat: repeat-y;
+}
+
+
+.item .footer, .item .footer div
+{
+	height: 6px;
+}
+
+.item .footer
+{
+	padding-left: 6px;
+	background-image: url(../img/groupbox/groupboxfooterleft.png);
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.item .footer > div 
+{
+	background-image: url(../img/groupbox/groupboxfootercontent.png);
+	background-repeat: repeat-x;
+}
+.item .footer > div > div
+{
+	padding-right: 6px;
+	background-image: url(../img/groupbox/groupboxfooterright.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+}

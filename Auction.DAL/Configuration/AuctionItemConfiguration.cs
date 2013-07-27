@@ -27,7 +27,7 @@ namespace Auction.DAL.Configuration
 																							.IsRequired();
 						this.Property(ai => ai.VendorStreet).HasMaxLength(150)
 																							  .IsRequired();
-						this.Property(ai => ai.VenderHouseNumber).HasMaxLength(10)
+						this.Property(ai => ai.VendorHouseNumber).HasMaxLength(10)
 																										 .IsRequired();
 						this.Property(ai => ai.VendorZipCode).HasMaxLength(10)
 																								 .IsRequired();
@@ -36,7 +36,7 @@ namespace Auction.DAL.Configuration
 
 						this.Property(ai => ai.VendorEmail).HasMaxLength(150);
 						this.Property(ai => ai.VendorPhoneNumber).HasMaxLength(20);
-						this.Property(ai => ai.VendorMobileNumber).HasMaxLength(20);						
+						this.Property(ai => ai.VendorMobileNumber).HasMaxLength(20);
 				}
 		}
 }

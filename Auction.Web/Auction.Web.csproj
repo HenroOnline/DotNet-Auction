@@ -110,35 +110,49 @@
   <ItemGroup>
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\AuctionController.cs" />
+    <Compile Include="Controllers\FileAttachmentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuctionItemDetailModel.cs" />
+    <Compile Include="Models\AuctionItemOverviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="404.html" />
     <Content Include="apple-touch-icon-114x114-precomposed.png" />
     <Content Include="apple-touch-icon-144x144-precomposed.png" />
     <Content Include="apple-touch-icon-57x57-precomposed.png" />
     <Content Include="apple-touch-icon-72x72-precomposed.png" />
     <Content Include="apple-touch-icon-precomposed.png" />
     <Content Include="apple-touch-icon.png" />
-    <Content Include="Content\CSS\bootstrap-responsive.css" />
-    <Content Include="Content\CSS\bootstrap-responsive.min.css" />
-    <Content Include="Content\CSS\bootstrap.css" />
-    <Content Include="Content\CSS\bootstrap.min.css" />
-    <Content Include="Content\CSS\main.css" />
-    <Content Include="Content\Images\glyphicons-halflings-white.png" />
-    <Content Include="Content\Images\glyphicons-halflings.png" />
+    <Content Include="Content\css\groupbox.css" />
+    <Content Include="Content\css\main.css" />
+    <Content Include="Content\css\normalize.css" />
+    <Content Include="Content\css\normalize.min.css" />
+    <Content Include="Content\img\BackGround.jpg" />
+    <Content Include="Content\img\groupbox\groupboxcontentleft.png" />
+    <Content Include="Content\img\groupbox\groupboxcontentright.png" />
+    <Content Include="Content\img\groupbox\groupBoxfootercontent.png" />
+    <Content Include="Content\img\groupbox\groupboxfooterleft.png" />
+    <Content Include="Content\img\groupbox\groupboxfooterright.png" />
+    <Content Include="Content\img\groupbox\groupboxheadercontent.png" />
+    <Content Include="Content\img\groupbox\groupboxheaderleft.png" />
+    <Content Include="Content\img\groupbox\groupboxheaderright.png" />
+    <Content Include="Content\img\NoImageAvailable.jpg" />
+    <Content Include="crossdomain.xml" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="humans.txt" />
+    <Content Include="index.html" />
+    <Content Include="robots.txt" />
     <Content Include="Scripts\main.js" />
-    <Content Include="Scripts\vendor\bootstrap.js" />
-    <Content Include="Scripts\vendor\bootstrap.min.js" />
+    <Content Include="Scripts\plugins.js" />
     <Content Include="Scripts\vendor\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\vendor\modernizr-2.6.2-respond-1.1.0.min.js" />
+    <Content Include="Scripts\vendor\modernizr-2.6.2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -150,12 +164,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Auction.BLL\Auction.BLL.csproj">
+      <Project>{80f228c1-af99-421f-89df-d3fddb66755c}</Project>
+      <Name>Auction.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Auction.DAL\Auction.DAL.csproj">
       <Project>{02e42685-527c-496e-b27d-862ea04a1a4e}</Project>
       <Name>Auction.DAL</Name>
@@ -169,6 +186,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Auction\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Auction\Detail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

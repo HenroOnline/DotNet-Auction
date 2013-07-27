@@ -1,3 +1,34 @@
-﻿@{
-		//View.Title = "henro";	
-}
+﻿@model List<Auction.Web.Models.AuctionItemOverviewModel>
+<div class="lister">
+	@foreach (var item in Model)
+	{
+				<div class="item">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description"><a href="@Url.Action("Detail", new { id = @item.Id })">@item.Title</a></span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+												<div class="image">
+														<a href="@Url.Action("Detail", new { id = @item.Id })">
+																<img src="@item.ImageUrl" alt="@item.Title" /></a>
+												</div>
+												<span class="date">Geplaatst op: <strong>@item.DateFormatted</strong></span><br />
+												<span class="highestbidding">Hoogste bod: @item.HighestBiddingAsString</span><br />
+												<span class="zipcode">Locatie: <strong>@item.VenderZipCode @item.VendorCity</strong></span>
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
+								</div>
+						</div>
+				</div>        
+	}
+		<div class="clear"></div>
+</div>

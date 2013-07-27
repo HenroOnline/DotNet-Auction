@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Auction.DAL
+namespace Auction.BLL
 {
 		public static class Config
 		{
@@ -24,6 +24,11 @@ namespace Auction.DAL
 						}
 
 						return defaultValue;
+				}
+
+				public static string DataRootFolder
+				{
+						get { return GetConfigValue("DataRootFolder"); }
 				}
 
 				public static class Auction

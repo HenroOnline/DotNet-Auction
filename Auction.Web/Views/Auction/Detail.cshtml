@@ -1,0 +1,111 @@
+﻿@model Auction.Web.Models.AuctionItemDetailModel
+<a href="/">Overzicht</a>
+<div class="detail">
+		<div class="item">
+				<div class="header">
+						<div>
+								<div>
+										<span class="description">@Model.Title</span>
+								</div>
+						</div>
+				</div>
+				<div class="data">
+						<div>
+								<div>
+										<div class="image">
+												<img src="@Model.ImageUrl" alt="@Model.Title" />
+										</div>
+										@Model.Description
+								</div>
+						</div>
+				</div>
+				<div class="footer">
+						<div>
+								<div></div>
+						</div>
+				</div>
+		</div>
+		<div class="item bidding">
+				<div class="header">
+						<div>
+								<div>
+										<span class="description">Biedingen</span>
+								</div>
+						</div>
+				</div>
+				<div class="data">
+						<div>
+								<div>
+										Nog geen biedingen uitgebracht
+								</div>
+						</div>
+				</div>
+				<div class="footer">
+						<div>
+								<div></div>
+						</div>
+				</div>
+		</div>
+		<div class="item newbid">
+				<div class="header">
+						<div>
+								<div>
+										<span class="description">Bieding toevoegen</span>
+								</div>
+						</div>
+				</div>
+				<div class="data">
+						<div>
+								<div>
+										<ul class="formfields">
+												<li>
+														<div class="label">Naam</div>
+														<div class="input"><input type="text" name="BiddingName" maxlength="150" placeholder="Naam" class="s5" /></div>
+														<div class="clear" />
+												</li>
+												<li>
+														<div class="label">Adres</div>
+														<div class="input">
+																<input type="text" name="BiddingStreet" maxlength="150" placeholder="Straat" class="s4" />
+																<input type="text" name="BiddingHouseNumber" maxlength="10" placeholder="Huisnr" class="s1" />
+														</div>
+														<div class="clear" />
+												</li>
+
+												<li>
+														<div class="label">Postcode / plaats</div>
+														<div class="input">
+																<input type="text" name="BiddingZipCode" maxlength="10" placeholder="Postcode" class="s1" />
+																<input type="text" name="BiddingCity" maxlength="150" placeholder="Plaats" class="s4" />
+														</div>
+														<div class="clear" />
+												</li>
+												<li>
+														<div class="label">E-mail</div>
+														<div class="input"><input type="email" name="BiddingEmail" maxlength="150" placeholder="E-mail" class="s5" /></div>
+														<div class="clear" />
+												</li>
+												<li>
+														<div class="label">Telefoonnummer</div>
+														<div class="input"><input type="email" name="BiddingPhoneNumber" maxlength="20" placeholder="Telefoonnummer" class="s2" /></div>
+														<div class="clear" />
+												</li>
+												<li>
+														<div class="label">Mobiel nummer</div>
+														<div class="input"><input type="email" name="BiddingMobileNumber" maxlength="150" placeholder="Mobiel nummer" class="s2" /></div>
+														<div class="clear" />
+												</li>
+												<li>
+														<input type="submit" value="Bod uitbrengen" />
+												</li>
+										</ul>
+								</div>
+						</div>
+				</div>
+				<div class="footer">
+						<div>
+								<div></div>
+						</div>
+				</div>
+		</div>
+</div>

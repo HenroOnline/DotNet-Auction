@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction.Web", "Auction.Web\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction.DAL", "Auction.DAL\Auction.DAL.csproj", "{02E42685-527C-496E-B27D-862EA04A1A4E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auction.BLL", "Auction.BLL\Auction.BLL.csproj", "{80F228C1-AF99-421F-89DF-D3FDDB66755C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{02E42685-527C-496E-B27D-862EA04A1A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02E42685-527C-496E-B27D-862EA04A1A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02E42685-527C-496E-B27D-862EA04A1A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80F228C1-AF99-421F-89DF-D3FDDB66755C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80F228C1-AF99-421F-89DF-D3FDDB66755C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80F228C1-AF99-421F-89DF-D3FDDB66755C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80F228C1-AF99-421F-89DF-D3FDDB66755C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

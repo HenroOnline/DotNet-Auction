@@ -76,6 +76,7 @@ namespace Auction.DAL
 						modelBuilder.Configurations.Add(new AuctionItemBiddingConfiguration());
 						modelBuilder.Configurations.Add(new AuctionItemConfiguration());
 						modelBuilder.Configurations.Add(new FileAttachmentConfiguration());
+						modelBuilder.Configurations.Add(new FileAttachmentAuctionItemConfiguration());
 				}
 
 				public override int SaveChanges()
