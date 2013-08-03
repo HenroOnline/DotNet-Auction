@@ -34,9 +34,15 @@ namespace Auction.Web.Controllers
 								widthToUse = maxwidth.Value;
 						}
 
+						byte[] attachmentData = null;
 						if (attachment != null)
 						{
-								return File(FileHelper.SelectDataFromFileAttachment(attachment.Id, new System.Drawing.Size(widthToUse, heightToUse)), attachment.ContentType);
+								attachmentData = FileHelper.SelectDataFromFileAttachment(attachment.Id, new System.Drawing.Size(widthToUse, heightToUse));
+						}
+
+						if (attachmentData != null)
+						{								
+								return File(attachmentData, attachment.ContentType);
 						}
 						else
 						{

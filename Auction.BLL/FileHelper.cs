@@ -39,17 +39,24 @@ namespace Auction.BLL
 
 										var ent = FileAttachmentRepository.Instance.Select(fileAttachmentId) ?? FileAttachmentRepository.Instance.NewEntity();
 
-										ent.Name = name;
+										ent.Name = Path.GetFileNameWithoutExtension(name);
 										ent.SizeInBytes = (Int32)stream.Length;
 										ent.ContentType = contentType;
 										ent.Extension = extension;
 
 										FileAttachmentRepository.Instance.Save(ent);
 
+										var fileAttachmentFolder = System.IO.Path.Combine(fileAttachmentRootFolder, ent.Id.ToString());
+										if (!System.IO.Directory.Exists(fileAttachmentFolder))
+										{
+												System.IO.Directory.CreateDirectory(fileAttachmentFolder);
+										}
+
+										
 										FileStream fs = null;
 										try
 										{
-												var storedFileName = System.IO.Path.Combine(fileAttachmentRootFolder, String.Format("{0}_{1}", ent.Id, ent.Name));
+												var storedFileName = System.IO.Path.Combine(fileAttachmentFolder, name);
 
 												byte[] data = new byte[ent.SizeInBytes];
 												stream.Read(data, 0, ent.SizeInBytes);

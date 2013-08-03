@@ -108,12 +108,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\AuctionController.cs" />
     <Compile Include="Controllers\FileAttachmentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuctionItemAddModel.cs" />
     <Compile Include="Models\AuctionItemDetailModel.cs" />
     <Compile Include="Models\AuctionItemOverviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,6 +144,7 @@
     <Content Include="Content\img\groupbox\groupboxheadercontent.png" />
     <Content Include="Content\img\groupbox\groupboxheaderleft.png" />
     <Content Include="Content\img\groupbox\groupboxheaderright.png" />
+    <Content Include="Content\img\Header.jpg" />
     <Content Include="Content\img\NoImageAvailable.jpg" />
     <Content Include="crossdomain.xml" />
     <Content Include="favicon.ico" />
@@ -164,6 +167,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DataAnnotations\" />
+    <Folder Include="Validators\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -189,6 +194,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Auction\Detail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Content\FAQ.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Auction\Add.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Auction\View1.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\EditorTemplates\TextBoxSize5.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

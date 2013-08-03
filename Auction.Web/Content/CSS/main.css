@@ -61,9 +61,8 @@ textarea {
    ========================================================================== */
 
 body {
-		font: Arial;
-		font-size: 11px;
-		
+		font-family: Tahoma;
+		font-size: 11px;		
 }
 
 a {
@@ -81,10 +80,56 @@ a:hover {
 .bgheight { height: 100%; }
 
 #wrapper {
+		margin-top: 10px;
 		position: relative;
-		width: 970px;
+		min-width: 485px;
+		max-width: 970px;
 		margin-left: auto;
 		margin-right: auto;
+		background-color: #FFFFFF;
+}
+
+.header {
+		position: relative;
+		background: url(../img/Header.jpg);		
+		height: 244px;
+}
+
+.header .title {
+		position: absolute;
+		bottom: 10px;
+		left: 15px;
+}
+
+.header .small {
+		font-size: 26px;
+		font-weight: bold;
+		color: #FFFFFF;
+}
+
+.header .large {
+		font-size: 75px;
+		font-weight: bold;
+		color: #FFFFFF;
+}
+
+ul.menu {
+		padding-left: 10px;
+		margin: 0px;
+		margin-bottom: 10px;
+		list-style-type: none;
+
+		background-image: url(../img/groupbox/groupboxheadercontent.png);
+		background-repeat: repeat-x;
+}
+
+ul.menu li {
+		display: inline-block;
+		padding-right: 15px;
+		
+		line-height: 25px;
+		font-weight: bold;		
+		text-transform: uppercase;
 }
 
 .lister div.item {
@@ -94,9 +139,25 @@ a:hover {
 		margin-bottom: 10px;
 }
 
-.lister div.item:nth-child(3n+2) {
-		margin-left: 20px;		
-		margin-right: 20px;
+@media all and (min-width: 970px) {
+		.lister div.item:nth-child(3n+2) {
+				margin-left: 20px;
+				margin-right: 20px;
+		}
+}
+
+@media all and (min-width: 660px) and (max-width: 969px){
+		.lister div.item:nth-child(2n) {			
+				margin-left: 20px;
+				margin-right: 20px;
+				float: left;
+		}
+}
+
+@media all and (max-width: 659px){
+		.lister div.item {				
+				margin-right: 40px;
+		}
 }
 
 .lister div.item img {
@@ -113,8 +174,22 @@ a:hover {
 		text-align: center;
 }
 
+.lister .item ul {	
+		margin: 0px;
+		padding: 0px;
+		list-style-type: none;
+}
+
+.lister .item ul .label {		
+		width: 150px;
+}
+
+.detail {
+		padding-top: 10px;
+}
+
 .detail div.item {
-		float:	left;
+		float: left;
 		width: 475px;
 }
 
@@ -127,10 +202,44 @@ a:hover {
 		margin-top: 20px;
 }
 
+.newitem div.itemdata {
+		margin-top: 20px;
+}
+
+.newitem div.itemdata textarea{
+		width: 350px;
+		height: 100px;
+}
+
+.newitem {
+		width: 475px;
+}
+
+.newitem .fileattachment{
+		margin-top: 20px;
+		margin-bottom: 20px;
+}
+
+.newitem .fileattachment input {
+		margin-top: 4px;
+		margin-bottom: 4px;
+		width: 100%;
+}
+
+
+.newitem {
+		position: relative;
+}
+
+.newitem input[type="submit"] {
+		position: absolute;
+		bottom: -40px;
+		right: 0px;
+}
+
 .clear {
 		clear: both;
 }
-
 
 .formfields {
 		margin: 0px;
@@ -155,22 +264,82 @@ a:hover {
 		width: 46px;
 }
 
+.formfields .s1.input-validation-error {
+		width: 48px;
+}
+
 .formfields .s2 {
 		width: 100px;
+}
+
+.formfields .s2.input-validation-error {
+		width: 102px;
 }
 
 .formfields .s3 {
 		width: 150px;
 }
 
+.formfields .s3.input-validation-error {
+		width: 152px;
+}
+
 .formfields .s4 {
 		width: 197px;
+}
+
+.formfields .s4.input-validation-error {
+		width: 199px;
 }
 
 .formfields .s5 {
 		width: 250px;
 }
 
+.formfields .s5.input-validation-error {
+		width: 252px;
+}
+
+input[type="button"], input[type="submit"]
+{
+	background-color: #4E565F;
+	
+	color: #FFFFFF;
+	border-top: 1px solid #C0C0C0;
+	border-left: 1px solid #C0C0C0;
+	
+	border-right: 1px solid #434343;
+	border-bottom: 1px solid #434343;
+	
+	
+	font-weight: bold;  
+	font-size: 11px;
+	font-family: Arial;
+}
+
+
+.field-validation-error {
+    color: #ff0000;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+		
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid {
+    display: none;
+}
 
 /* ==========================================================================
    Media Queries

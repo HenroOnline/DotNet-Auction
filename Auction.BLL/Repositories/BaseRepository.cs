@@ -56,14 +56,14 @@ namespace Auction.BLL.Repositories
 																				.ToList();
 				}
 
-				public void Save(T entity)
+				public virtual void Save(T entity)
 				{
 						if (entity.Id == 0)
 						{
 								Context.Set<T>().Add(entity);
 						}
 
-						//Context.SaveChanges();
+						Context.SaveChanges();
 				}
 
 				public virtual void Delete(T entity)
@@ -74,9 +74,11 @@ namespace Auction.BLL.Repositories
 						}
 				}
 
+				/*
 				public void PersistChanges()
 				{
 						Context.SaveChanges();
 				}
+				*/ 
 		}
 }

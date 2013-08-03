@@ -50,7 +50,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="Repositories\AuctionItemBiddingRepository.cs" />
     <Compile Include="Repositories\FileAttachmentAuctionItemRepository.cs" />
-    <Compile Include="Repositories\FileHelper.cs" />
+    <Compile Include="FileHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AuctionItemRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />

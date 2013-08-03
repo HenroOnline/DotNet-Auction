@@ -22,5 +22,17 @@ namespace Auction.BLL.Repositories
 																																				&& fai.ModifiedKind != "D")
 																																.OrderBy(fai => fai.Sequence).ToList();
 				}
+
+				public void Create(int auctionItemId, int fileAttachmentId, int sequence)
+				{
+						var result = new FileAttachmentAuctionItem
+						{
+								AuctionItemId = auctionItemId,
+								FileAttachmentId = fileAttachmentId,
+								Sequence = sequence
+						};
+
+						Save(result);
+				}
 		}
 }

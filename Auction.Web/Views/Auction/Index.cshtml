@@ -17,9 +17,20 @@
 														<a href="@Url.Action("Detail", new { id = @item.Id })">
 																<img src="@item.ImageUrl" alt="@item.Title" /></a>
 												</div>
-												<span class="date">Geplaatst op: <strong>@item.DateFormatted</strong></span><br />
-												<span class="highestbidding">Hoogste bod: @item.HighestBiddingAsString</span><br />
-												<span class="zipcode">Locatie: <strong>@item.VenderZipCode @item.VendorCity</strong></span>
+												<ul>
+														<li>
+																<span class="label">Geplaatst op:</span>
+																<strong>@item.DateFormatted</strong>
+														</li>
+														<li>
+																<span class="label">Hoogste bod:</span>
+																@item.HighestBiddingAsString
+														</li>
+														<li>
+																<span class="label">Locatie:</span>
+																<strong>@item.VenderZipCode @item.VendorCity</strong>
+														</li>
+												</ul>
 										</div>
 								</div>
 						</div>

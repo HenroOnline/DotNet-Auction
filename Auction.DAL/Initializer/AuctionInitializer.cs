@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Auction.DAL.Initializer
 {
-		public class AuctionInitializer : DropCreateDatabaseIfModelChanges<AuctionContext>
+		public class AuctionInitializer : CreateDatabaseIfNotExists<AuctionContext>
 		{
-
+				
 		}
 }
