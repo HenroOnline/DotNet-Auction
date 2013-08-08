@@ -1,0 +1,173 @@
+﻿@model Auction.Web.Models.AuctionItemAddModel
+
+<script type="text/javascript">
+		function CheckForFileattachment() {
+				var fileAvailable = false;
+				$("input[type=file]").each(function () {
+						if ($(this).val().length > 0) {
+								fileAvailable = true;
+						}
+				});
+
+				var submitForm = true;
+				if (!fileAvailable) {
+						submitForm = confirm("U heeft nog geen foto's gekozen, doorgaan?");
+				}
+
+				if (submitForm) {
+						confirm("Veiling item wordt nu geplaatst, doorgaan?");
+				}
+
+				return submitForm;
+		}
+
+		$(function () {
+				$("#MinimumPrice").change(function () {						
+						var sender = $(this);						
+						sender.val(sender.val().replace(/\./g, ','));
+				});
+
+				$("form").validate({
+						submitHandler: function (form) {
+								if (CheckForFileattachment()) {
+										return;
+								}
+
+								form.submit();
+						}
+				});
+		});
+</script>
+
+@using (Html.BeginForm("Add", "Auction", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+		<div class="newitem">
+				<div class="item itemdata">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description">Veiling item</span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+												<ul class="formfields">
+														<li>
+																<div class="label">@Html.LabelFor(model => model.Title)</div>																																																
+																<div class="input">@Html.TextBoxFor(model => model.Title, new { @class = "s5", placeholder = "Titel" })</div>
+																<div class="clear"></div>
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.Description)</div>
+																<div class="input">@Html.TextAreaFor(model => model.Description, new { placeholder = "Omschrijving" })</div>
+																<div class="clear"></div>
+														</li>	
+														<li>
+																<div class="label">@Html.LabelFor(model => model.MinimumPrice)</div>
+																<div class="input">@Html.TextBoxFor(model => model.MinimumPrice, new { @class = "s1", placeholder = "Minimumprijs" })</div>
+																<div class="clear"></div>
+														</li>	
+												</ul>
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
+								</div>
+						</div>
+				</div>
+				<div class="item fileattachment">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description">Foto's</span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+												<input type="file" name="FileAttachment[]" /><br />
+												<input type="file" name="FileAttachment[]" /><br />
+												<input type="file" name="FileAttachment[]" /><br />
+												<input type="file" name="FileAttachment[]" /><br />
+												<input type="file" name="FileAttachment[]" />
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
+								</div>
+						</div>
+				</div>
+				<div class="item contact">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description">Contactinformatie</span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+												<ul class="formfields">
+														<li>
+																<div class="label">@Html.LabelFor(model => model.VendorName)</div>
+																<div class="input">@Html.TextBoxFor(model => model.VendorName, new { @class = "s5", placeholder = "Naam" })</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.VendorStreet, "Adres")</div>
+																<div class="input">
+																		@Html.TextBoxFor(model => model.VendorStreet, new { @class = "s4", placeholder = "Straat" })
+																		@Html.TextBoxFor(model => model.VendorHouseNumber, new { @class = "s1", placeholder = "Huisnr" })
+																</div>
+																<div class="clear" />
+														</li>
+
+														<li>
+																<div class="label">@Html.LabelFor(model => model.VendorZipCode, "Postcode / plaats")</div>
+																<div class="input">
+																		@Html.TextBoxFor(model => model.VendorZipCode, new { @class = "s1", placeholder = "Postcode" })
+																		@Html.TextBoxFor(model => model.VendorCity, new { @class = "s4", placeholder = "Plaats" })
+																</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.VendorEmail)</div>
+																<div class="input">@Html.TextBoxFor(model => model.VendorEmail, new { @class = "s5", placeholder = "E-mail", type = "email" })</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.VendorPhoneNumber)</div>
+																<div class="input">@Html.TextBoxFor(model => model.VendorPhoneNumber, new { @class = "s2", placeholder = "Telefoonnummer", type = "tel" })</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.VendorMobileNumber)</div>
+																<div class="input">@Html.TextBoxFor(model => model.VendorMobileNumber, new { @class = "s2", placeholder = "Mobiel nummer", type = "tel" })</div>
+																<div class="clear" />
+														</li>
+												</ul>
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
+								</div>
+						</div>				
+				</div>
+				<div class="buttonbar">
+						<input type="submit" value="Veiling item toevoegen" />
+				</div>
+				@Html.ValidationSummary(false)
+				<div class="clear"></div>
+		</div>
+}
