@@ -116,6 +116,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuctionItemAddModel.cs" />
+    <Compile Include="Models\AuctionItemBiddingModel.cs" />
     <Compile Include="Models\AuctionItemDetailModel.cs" />
     <Compile Include="Models\AuctionItemOverviewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -152,11 +153,15 @@
     <Content Include="humans.txt" />
     <Content Include="index.html" />
     <Content Include="robots.txt" />
+    <Content Include="Scripts\vendor\jquery.validate.min.js" />
+    <Content Include="Scripts\vendor\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\plugins.js" />
     <Content Include="Scripts\vendor\jquery-1.9.1.min.js" />
     <Content Include="Scripts\vendor\modernizr-2.6.2.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -200,12 +205,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Auction\Add.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Auction\View1.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\EditorTemplates\TextBoxSize5.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

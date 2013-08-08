@@ -55,7 +55,7 @@ namespace Auction.Web.Models
 						{
 								if (HighestBidding != 0)
 								{
-										return new MvcHtmlString(string.Format("<strong>{0}</strong> op <strong>{1}</strong>", HighestBiddingFormatted, HighestBiddingDateFormatted));
+										return new MvcHtmlString(string.Format("<strong>&euro;&nbsp;{0}</strong>", HighestBiddingFormatted));
 								}
 								return new MvcHtmlString("-");
 						}

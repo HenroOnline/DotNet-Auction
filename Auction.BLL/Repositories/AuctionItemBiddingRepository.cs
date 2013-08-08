@@ -17,6 +17,15 @@ namespace Auction.BLL.Repositories
 														.Take(1)														
 														.FirstOrDefault();
 														
-				}		
+				}
+
+				public List<AuctionItemBidding> ListByAuctionItem(int auctionItemId)
+				{
+						return this.Context.Set<AuctionItemBidding>().Where(t => t.ModifiedKind != "D")
+														.Where(t => t.AuctionItemId == auctionItemId)
+														.OrderByDescending(t => t.Bidding)
+														.ToList();
+
+				}
 		}
 }

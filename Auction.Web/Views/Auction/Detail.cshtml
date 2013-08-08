@@ -1,110 +1,208 @@
 ﻿@model Auction.Web.Models.AuctionItemDetailModel
-<div class="detail">
-		<div class="item">
-				<div class="header">
-						<div>
-								<div>
-										<span class="description">@Model.Title</span>
-								</div>
-						</div>
-				</div>
-				<div class="data">
-						<div>
-								<div>
-										<div class="image">
-												<img src="@Model.ImageUrl" alt="@Model.Title" />
-										</div>
-										@Model.Description
-								</div>
-						</div>
-				</div>
-				<div class="footer">
-						<div>
-								<div></div>
-						</div>
-				</div>
-		</div>
-		<div class="item bidding">
-				<div class="header">
-						<div>
-								<div>
-										<span class="description">Biedingen</span>
-								</div>
-						</div>
-				</div>
-				<div class="data">
-						<div>
-								<div>
-										Nog geen biedingen uitgebracht
-								</div>
-						</div>
-				</div>
-				<div class="footer">
-						<div>
-								<div></div>
-						</div>
-				</div>
-		</div>
-		<div class="item newbid">
-				<div class="header">
-						<div>
-								<div>
-										<span class="description">Bieding toevoegen</span>
-								</div>
-						</div>
-				</div>
-				<div class="data">
-						<div>
-								<div>
-										<ul class="formfields">
-												<li>
-														<div class="label">Naam</div>
-														<div class="input"><input type="text" name="BiddingName" maxlength="150" placeholder="Naam" class="s5" /></div>
-														<div class="clear" />
-												</li>
-												<li>
-														<div class="label">Adres</div>
-														<div class="input">
-																<input type="text" name="BiddingStreet" maxlength="150" placeholder="Straat" class="s4" />
-																<input type="text" name="BiddingHouseNumber" maxlength="10" placeholder="Huisnr" class="s1" />
-														</div>
-														<div class="clear" />
-												</li>
+<script type="text/javascript">
+		function ChangeMainPicture(fileattachmentId) {
+				$("#mainimage").animate({ opacity: 0 }, function () {
+						var newImageUrl = "/FileAttachment/" + fileattachmentId + "?MaxHeight=461&MaxWidth=461";
+						var preloadImage = new $('<img src="' + newImageUrl + '" style="display: none;" />');
+						$("body").append(preloadImage);
 
-												<li>
-														<div class="label">Postcode / plaats</div>
-														<div class="input">
-																<input type="text" name="BiddingZipCode" maxlength="10" placeholder="Postcode" class="s1" />
-																<input type="text" name="BiddingCity" maxlength="150" placeholder="Plaats" class="s4" />
+						var mainImageElement = $(this);
+
+						mainImageElement.height(mainImageElement.height() + "px");
+						mainImageElement.width(mainImageElement.width() + "px");
+						preloadImage.load(function () {
+								mainImageElement.attr("src", newImageUrl);
+								mainImageElement.animate(
+										{
+												opacity: 1,
+												width: $(this).width() + "px",
+												height: $(this).height() + "px"
+										}, 1000);
+								$(this).remove();
+						});
+				});
+
+				$parentLink = $("#mainimage").closest("a");
+				$parentLink.attr("href", "/FileAttachment/" + fileattachmentId);
+		}
+
+		$(function () {
+				$("a[data-fileattachmentid]").each(function () {
+						$(this).click(function () {
+								ChangeMainPicture($(this).attr("data-fileattachmentid"));
+						});
+				});
+
+				$(function () {
+						$("#NewBidding_Bidding").change(function () {
+								var sender = $(this);
+								sender.val(sender.val().replace(/\./g, ','));
+						});
+
+						$("form").validate({
+								submitHandler: function (form) {
+										if (!confirm("Bod wordt nu geplaatst, doorgaan?")) {
+												return;
+										}
+
+										form.submit();
+								}
+						});
+				});
+		});
+</script>
+<div class="detail">
+		@using (Html.BeginForm("Detail", "Auction", FormMethod.Post))
+	{
+				<div class="item">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description">@Model.Title</span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+												<div class="image">
+														<a href="/FileAttachment/@Model.ImageFileAttachment" target="_blank">
+																<img src="/FileAttachment/@Model.ImageFileAttachment?MaxHeight=461&MaxWidth=461" alt="@Model.Title" id="mainimage" /></a>
+												</div>
+												@if (@Model.ImageFileAttachments.Count > 1)
+												{
+														<div class="carrousel">
+																@foreach (var fileAttachmentId in @Model.ImageFileAttachments)
+																{
+																		<div class="image">
+																				<a href="javascript: void(0);" data-fileattachmentid="@fileAttachmentId">
+																						<img src="/FileAttachment/@fileAttachmentId?MaxHeight=75&MaxWidth=75" alt="@Model.Title" /></a>
+																		</div>
+																}
+																<div class="clear"></div>
 														</div>
-														<div class="clear" />
-												</li>
-												<li>
-														<div class="label">E-mail</div>
-														<div class="input"><input type="email" name="BiddingEmail" maxlength="150" placeholder="E-mail" class="s5" /></div>
-														<div class="clear" />
-												</li>
-												<li>
-														<div class="label">Telefoonnummer</div>
-														<div class="input"><input type="tel" name="BiddingPhoneNumber" maxlength="20" placeholder="Telefoonnummer" class="s2" /></div>
-														<div class="clear" />
-												</li>
-												<li>
-														<div class="label">Mobiel nummer</div>
-														<div class="input"><input type="tel" name="BiddingMobileNumber" maxlength="150" placeholder="Mobiel nummer" class="s2" /></div>
-														<div class="clear" />
-												</li>
-												<li>
-														<input type="submit" value="Bod uitbrengen" />
-												</li>
-										</ul>
+												}
+
+												<br />
+												@if (Model.MinimumPrice != 0)
+												{
+														<strong>Minimum prijs: &euro;&nbsp;@Model.MinimumPrice</strong><br />
+														<br />
+												}
+												@Model.Description
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
 								</div>
 						</div>
 				</div>
-				<div class="footer">
-						<div>
-								<div></div>
+				<div class="item bidding">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description">Biedingen</span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+												@if(Model.Biddings.Count == 0) {
+														<span>Nog geen biedingen uitgebracht</span>
+												}else{
+														<ul class="biddingoverview">
+																@foreach(var currentBid in Model.Biddings)
+																{
+																		<li>
+																				<div class="label"><strong>&euro;&nbsp;@currentBid.Bidding</strong></div>
+																				<span>@currentBid.DateFormatted</span>
+																		</li>
+																}
+														</ul>
+												}
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
+								</div>
 						</div>
 				</div>
-		</div>
+				<div class="item newbid">
+						<div class="header">
+								<div>
+										<div>
+												<span class="description">Bieding toevoegen</span>
+										</div>
+								</div>
+						</div>
+						<div class="data">
+								<div>
+										<div>
+
+												@Html.AntiForgeryToken()
+												<input type="hidden" name="Id" value="@Model.Id" />
+												<ul class="formfields">
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.Bidding)</div>
+																<div class="input">@Html.TextBoxFor(model => model.NewBidding.Bidding, new { @class = "s1", placeholder = "Bod" })</div>
+																<div class="clear"></div>
+																<br />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingName)</div>
+																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingName, new { @class = "s5", placeholder = "Naam" })</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingStreet, "Adres")</div>
+																<div class="input">
+																		@Html.TextBoxFor(model => model.NewBidding.BiddingStreet, new { @class = "s4", placeholder = "Straat" })
+																		@Html.TextBoxFor(model => model.NewBidding.BiddingHouseNumber, new { @class = "s1", placeholder = "Huisnr" })
+																</div>
+																<div class="clear" />
+														</li>
+
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingZipCode, "Postcode / plaats")</div>
+																<div class="input">
+																		@Html.TextBoxFor(model => model.NewBidding.BiddingZipCode, new { @class = "s1", placeholder = "Postcode" })
+																		@Html.TextBoxFor(model => model.NewBidding.BiddingCity, new { @class = "s4", placeholder = "Plaats" })
+																</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingEmail)</div>
+																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingEmail, new { @class = "s5", placeholder = "E-mail", type = "email" })</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingPhoneNumber)</div>
+																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingPhoneNumber, new { @class = "s2", placeholder = "Telefoonnummer", type = "tel" })</div>
+																<div class="clear" />
+														</li>
+														<li>
+																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingMobileNumber)</div>
+																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingMobileNumber, new { @class = "s2", placeholder = "Mobiel nummer", type = "tel" })</div>
+																<div class="clear" />
+														</li>
+												</ul>												
+										</div>
+								</div>
+						</div>
+						<div class="footer">
+								<div>
+										<div></div>
+								</div>
+						</div>
+						<div class="buttonbar">
+								<input type="submit" value="Bod uitbrengen" />
+						</div>
+				</div>		
+				@Html.ValidationSummary(false)
+	}
 </div>

@@ -10,22 +10,59 @@ using System.Web.Mvc;
 
 namespace Auction.Web.Controllers
 {
-    public class AuctionController : Controller
-    {
-        //
-        // GET: /Home/
-        public ActionResult Index()
-        {						
+		public class AuctionController : Controller
+		{
+				//
+				// GET: /Home/
+				public ActionResult Index()
+				{
 						var data = AuctionItemRepository.Instance.ListOrderedByDate();
-						
-            return View(data.Select(d => new AuctionItemOverviewModel(d)).ToList());
-        }
+
+						return View(data.Select(d => new AuctionItemOverviewModel(d)).ToList());
+				}
 
 				public ActionResult Detail(int id)
 				{
 						var data = AuctionItemRepository.Instance.Select(id);
 
 						return View(new AuctionItemDetailModel(data));
+				}
+
+				[HttpPost]
+				public ActionResult Detail(AuctionItemDetailModel auctionItem)
+				{
+						var dalAuctionItem = AuctionItemRepository.Instance.Select(auctionItem.Id);
+
+						if (auctionItem.NewBidding != null)
+						{
+								if (string.IsNullOrEmpty(auctionItem.NewBidding.BiddingPhoneNumber) && string.IsNullOrEmpty(auctionItem.NewBidding.BiddingMobileNumber))
+								{
+										ModelState.AddModelError("NewBidding.BiddingPhoneNumber", "Een telefoonnummer is verplicht");
+										ModelState.AddModelError("NewBidding.BiddingMobileNumber", string.Empty);
+								}
+
+								if (ModelState.IsValidField("NewBidding.Bidding"))
+								{
+										// Check if minimum bid is reached
+										if (dalAuctionItem.MinimumPrice != 0 && auctionItem.NewBidding.Bidding > 0)
+										{
+												if (auctionItem.NewBidding.Bidding < dalAuctionItem.MinimumPrice)
+												{
+														ModelState.AddModelError("NewBidding.Bidding", string.Format("Minimum prijs is: € {0}", dalAuctionItem.MinimumPrice));
+												}
+										}
+								}
+
+								if (ModelState.IsValid)
+								{
+										var dalEntity = auctionItem.NewBidding.ToDalEntity(auctionItem.Id);
+										AuctionItemBiddingRepository.Instance.Save(dalEntity);
+
+										return RedirectToAction("Detail", new { id = auctionItem.Id });
+								}
+						}
+
+						return View(new AuctionItemDetailModel(dalAuctionItem));
 				}
 
 				public ActionResult Add()
@@ -54,7 +91,7 @@ namespace Auction.Web.Controllers
 										if (file.InputStream.Length == 0)
 										{
 												continue;
-										}										
+										}
 
 										var fileAttachmentId = FileHelper.SaveFileAttachment(0, file.InputStream, file.FileName, file.ContentType);
 										FileAttachmentAuctionItemRepository.Instance.Create(dalEntity.Id, fileAttachmentId, (i + 1) * 10);
@@ -65,5 +102,5 @@ namespace Auction.Web.Controllers
 
 						return View();
 				}
-    }
+		}
 }

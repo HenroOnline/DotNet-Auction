@@ -17,7 +17,7 @@ namespace Auction.BLL.Repositories
 						var daysValid = Config.Auction.DaysValid;
 
 						return result.Where(ai => !onlyNotExpiredItems || ai.Date.Date.AddDays(daysValid) >= currentDate)
-												 .OrderBy(ai => ai.Date).ToList();
+												 .OrderByDescending(ai => ai.Date).ToList();
 				}				
 		}
 }

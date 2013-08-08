@@ -34,20 +34,22 @@ namespace Auction.Web.Controllers
 								widthToUse = maxwidth.Value;
 						}
 
-						byte[] attachmentData = null;
-						if (attachment != null)
+						try
 						{
-								attachmentData = FileHelper.SelectDataFromFileAttachment(attachment.Id, new System.Drawing.Size(widthToUse, heightToUse));
-						}
+								byte[] attachmentData = null;
+								if (attachment != null)
+								{
+										attachmentData = FileHelper.SelectDataFromFileAttachment(attachment.Id, new System.Drawing.Size(widthToUse, heightToUse));
+								}
 
-						if (attachmentData != null)
-						{								
-								return File(attachmentData, attachment.ContentType);
+								if (attachmentData != null)
+								{
+										return File(attachmentData, attachment.ContentType);
+								}
 						}
-						else
-						{
-								return File(FileHelper.ReadFromDisk("NoImageAvailable", "jpg", Server.MapPath("~/Content/img"), new System.Drawing.Size(widthToUse, heightToUse)), "image/jpg");
-						}
+						catch (Exception) { }
+
+						return File(FileHelper.ReadFromDisk("NoImageAvailable", "jpg", Server.MapPath("~/Content/img"), new System.Drawing.Size(widthToUse, heightToUse)), "image/jpg");
 				}
 		}
 }

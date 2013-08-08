@@ -15,34 +15,40 @@ namespace Auction.Web.Models
 
 				public string Description { get; set; }
 
-				public string ImageUrl { get; set; }
+				public decimal MinimumPrice { get; set; }
 
-				public List<string> ImageUrls { get; set; }
+				public int ImageFileAttachment { get; set; }
+
+				public List<int> ImageFileAttachments { get; set; }
+
+				public List<AuctionItemBiddingModel> Biddings{get;set;}
+
+				public AuctionItemBiddingModel NewBidding { get; set; }
+
+				public AuctionItemDetailModel() { }
 
 				public AuctionItemDetailModel(AuctionItem auctionItem)
 				{
 						Id = auctionItem.Id;
 						Title = auctionItem.Title;
 						Description = auctionItem.Description;
+						MinimumPrice = auctionItem.MinimumPrice;
 
-						var firstFileAttachmentAuctionItem = FileAttachmentAuctionItemRepository.Instance.SelectFirstByAuctionItem(auctionItem.Id);
-
-						if (firstFileAttachmentAuctionItem != null)
-						{
-								ImageUrl = string.Format("/FileAttachment/{0}?maxheight=250&maxwidth=250", firstFileAttachmentAuctionItem.FileAttachmentId);
-						}
-						else
-						{
-								ImageUrl = "/Content/img/NoImageAvailable.jpg";
-						}
-
-						ImageUrls = new List<string>();
-
+						ImageFileAttachments = new List<int>();
 						foreach (var fileAttachmentAuctionItem in FileAttachmentAuctionItemRepository.Instance.ListByAuctionItem(auctionItem.Id))
 						{
-								ImageUrls.Add(string.Format("/FileAttachment/{0}?maxheight=250&maxwidth=250", fileAttachmentAuctionItem.FileAttachmentId));
+								ImageFileAttachments.Add(fileAttachmentAuctionItem.FileAttachmentId);
 						}
 
+						Biddings = new List<AuctionItemBiddingModel>();
+						
+						AuctionItemBiddingRepository.Instance.ListByAuctionItem(auctionItem.Id).ForEach(b => Biddings.Add(new AuctionItemBiddingModel(b)));
+						
+						ImageFileAttachment = 0;
+						if (ImageFileAttachments.Count > 0)
+						{
+								ImageFileAttachment = ImageFileAttachments[0];
+						}
 				}
 		}
 }

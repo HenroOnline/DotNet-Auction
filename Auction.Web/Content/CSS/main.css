@@ -81,8 +81,9 @@ a:hover {
 
 #wrapper {
 		margin-top: 10px;
+		margin-bottom: 20px;
 		position: relative;
-		min-width: 485px;
+		
 		max-width: 970px;
 		margin-left: auto;
 		margin-right: auto;
@@ -181,25 +182,61 @@ ul.menu li {
 }
 
 .lister .item ul .label {		
-		width: 150px;
+		display: inline-block;
+		width: 80px;
 }
 
 .detail {
 		padding-top: 10px;
 }
 
-.detail div.item {
+@media all and (min-width: 970px) {
+		.detail div.item {
+				float: left;
+				width: 475px;
+		}
+
+		.detail div.bidding, .detail div.newbid {
+				float: right;
+				margin-left: 20px;
+		}
+
+		.detail div.newbid {
+				margin-top: 20px;
+		}
+}
+
+@media all and (max-width: 969px) {
+		.detail div.item {
+				padding-top: 20px;
+				float: left;
+				margin-right: 20px;
+				width: 475px;
+		}
+}
+
+.detail .carrousel {
+		padding-top: 10px;
+}
+
+.detail .image {
+		
+		text-align: center;
+}
+
+.detail .image a > img {
+		border: 1px solid #FFFFFF;
+}
+
+.detail .carrousel .image {
 		float: left;
+		
+		margin-right: 2px;
+}
+
+.detail .validation-summary-errors {		
 		width: 475px;
-}
-
-.detail div.bidding, .detail div.newbid {
 		float: right;
-		margin-left: 20px;
-}
-
-.detail div.newbid {
-		margin-top: 20px;
 }
 
 .newitem div.itemdata {
@@ -231,17 +268,34 @@ ul.menu li {
 		position: relative;
 }
 
-.newitem input[type="submit"] {
-		position: absolute;
-		bottom: -40px;
-		right: 0px;
+.buttonbar {
+		text-align: right;
+		margin-top: 20px;
 }
 
 .clear {
 		clear: both;
 }
 
-.formfields {
+.biddingoverview {
+		
+		
+}
+
+.biddingoverview li {
+		padding: 2px;
+}
+
+.biddingoverview li:nth-child(odd) {
+		 background-color: #FFFFFF;
+}
+
+.biddingoverview li div.label {
+		width: 100px;
+		float: left;
+}
+
+.formfields, .biddingoverview {
 		margin: 0px;
 		padding: 0px;
 		list-style-type: none;
@@ -265,6 +319,8 @@ ul.menu li {
 }
 
 .formfields .s1.input-validation-error {
+		padding-bottom: 2px;
+		padding-top: 2px;
 		width: 48px;
 }
 
@@ -273,6 +329,8 @@ ul.menu li {
 }
 
 .formfields .s2.input-validation-error {
+		padding-bottom: 2px;
+		padding-top: 2px;
 		width: 102px;
 }
 
@@ -281,6 +339,8 @@ ul.menu li {
 }
 
 .formfields .s3.input-validation-error {
+		padding-bottom: 2px;
+		padding-top: 2px;
 		width: 152px;
 }
 
@@ -289,6 +349,8 @@ ul.menu li {
 }
 
 .formfields .s4.input-validation-error {
+		padding-bottom: 2px;
+		padding-top: 2px;
 		width: 199px;
 }
 
@@ -296,7 +358,9 @@ ul.menu li {
 		width: 250px;
 }
 
-.formfields .s5.input-validation-error {
+.formfields .s5.input-validation-error {		
+		padding-bottom: 2px;
+		padding-top: 2px;
 		width: 252px;
 }
 
