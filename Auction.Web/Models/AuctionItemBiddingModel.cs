@@ -10,7 +10,6 @@ namespace Auction.Web.Models
 		public class AuctionItemBiddingModel
 		{
 				[Required(ErrorMessage = "{0} is verplicht")]
-				[Range(0.01, double.MaxValue, ErrorMessage = "Minimum bod is: € {1}")]
 				[Display(Name = "Bod")]
 				public decimal Bidding { get; set; }
 

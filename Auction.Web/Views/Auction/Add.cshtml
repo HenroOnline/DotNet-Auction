@@ -27,13 +27,13 @@
 						sender.val(sender.val().replace(/\./g, ','));
 				});
 
-				$("form").validate({
-						submitHandler: function (form) {
-								if (CheckForFileattachment()) {
-										return;
+				$("form").validate();
+				$("form").on("submit", function (e) {
+						var isValid = $(this).valid();
+						if (isValid) {								
+								if (!CheckForFileattachment()) {
+										e.preventDefault();
 								}
-
-								form.submit();
 						}
 				});
 		});
@@ -57,7 +57,7 @@
 												<ul class="formfields">
 														<li>
 																<div class="label">@Html.LabelFor(model => model.Title)</div>																																																
-																<div class="input">@Html.TextBoxFor(model => model.Title, new { @class = "s5", placeholder = "Titel" })</div>
+																<div class="input">@Html.TextBoxFor(model => model.Title, new { @class = "s5", placeholder = "Titel", autofocus="autofocus" })</div>
 																<div class="clear"></div>
 														</li>
 														<li>

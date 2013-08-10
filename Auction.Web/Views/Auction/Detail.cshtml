@@ -39,13 +39,13 @@
 								sender.val(sender.val().replace(/\./g, ','));
 						});
 
-						$("form").validate({
-								submitHandler: function (form) {
+						$("form").validate();
+						$("form").on("submit", function (e) {
+								var isValid = $(this).valid();
+								if (isValid) {
 										if (!confirm("Bod wordt nu geplaatst, doorgaan?")) {
-												return;
+												e.preventDefault();
 										}
-
-										form.submit();
 								}
 						});
 				});
@@ -53,7 +53,8 @@
 </script>
 <div class="detail">
 		@using (Html.BeginForm("Detail", "Auction", FormMethod.Post))
-	{
+		{
+				@Html.AntiForgeryToken()
 				<div class="item">
 						<div class="header">
 								<div>
@@ -81,14 +82,21 @@
 																}
 																<div class="clear"></div>
 														</div>
-												}
-
-												<br />
+												}												
+												<ul>
+														<li>
+																<span class="label">Veilingnummer:</span>
+																<strong>@Model.AuctionNumber</strong>
+														</li>												
 												@if (Model.MinimumPrice != 0)
 												{
-														<strong>Minimum prijs: &euro;&nbsp;@Model.MinimumPrice</strong><br />
-														<br />
+														<li>
+																<span class="label">Minimum prijs:</span>
+																<strong>&euro;&nbsp;@Model.MinimumPrice</strong>
+														</li>
 												}
+												</ul>
+												<br />
 												@Model.Description
 										</div>
 								</div>
@@ -99,110 +107,114 @@
 								</div>
 						</div>
 				</div>
-				<div class="item bidding">
-						<div class="header">
-								<div>
+				<div class="biddingcontainer">
+						<div class="item bidding">
+								<div class="header">
 										<div>
-												<span class="description">Biedingen</span>
+												<div>
+														<span class="description">Biedingen</span>
+												</div>
+										</div>
+								</div>
+								<div class="data">
+										<div>
+												<div>
+														@if(Model.Biddings.Count == 0) {
+																<span>Er zijn nog geen biedingen uitgebracht</span>
+														}else{
+																<ul class="biddingoverview">
+																		@foreach(var currentBid in Model.Biddings)
+																		{
+																				<li>
+																						<div class="label"><strong>&euro;&nbsp;@currentBid.Bidding</strong></div>
+																						<span>@currentBid.DateFormatted</span>
+																				</li>
+																		}
+																</ul>
+														}
+												</div>
+										</div>
+								</div>
+								<div class="footer">
+										<div>
+												<div></div>
 										</div>
 								</div>
 						</div>
-						<div class="data">
-								<div>
-										<div>
-												@if(Model.Biddings.Count == 0) {
-														<span>Nog geen biedingen uitgebracht</span>
-												}else{
-														<ul class="biddingoverview">
-																@foreach(var currentBid in Model.Biddings)
-																{
+						@if(!@Model.AuctionEndedMailSended) {
+								<div class="item newbid">
+										<div class="header">
+												<div>
+														<div>
+																<span class="description">Bieding toevoegen</span>
+														</div>
+												</div>
+										</div>
+										<div class="data">
+												<div>
+														<div>												
+																<input type="hidden" name="Id" value="@Model.Id" />
+																<ul class="formfields">
 																		<li>
-																				<div class="label"><strong>&euro;&nbsp;@currentBid.Bidding</strong></div>
-																				<span>@currentBid.DateFormatted</span>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.Bidding)</div>
+																				<div class="input">@Html.TextBoxFor(model => model.NewBidding.Bidding, new { @class = "s1", placeholder = "Bod", autofocus="autofocus" })</div>
+																				<div class="clear"></div>
+																				<br />
 																		</li>
-																}
-														</ul>
-												}
-										</div>
-								</div>
-						</div>
-						<div class="footer">
-								<div>
-										<div></div>
-								</div>
-						</div>
-				</div>
-				<div class="item newbid">
-						<div class="header">
-								<div>
-										<div>
-												<span class="description">Bieding toevoegen</span>
-										</div>
-								</div>
-						</div>
-						<div class="data">
-								<div>
-										<div>
+																		<li>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingName)</div>
+																				<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingName, new { @class = "s5", placeholder = "Naam" })</div>
+																				<div class="clear" />
+																		</li>
+																		<li>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingStreet, "Adres")</div>
+																				<div class="input">
+																						@Html.TextBoxFor(model => model.NewBidding.BiddingStreet, new { @class = "s4", placeholder = "Straat" })
+																						@Html.TextBoxFor(model => model.NewBidding.BiddingHouseNumber, new { @class = "s1", placeholder = "Huisnr" })
+																				</div>
+																				<div class="clear" />
+																		</li>
 
-												@Html.AntiForgeryToken()
-												<input type="hidden" name="Id" value="@Model.Id" />
-												<ul class="formfields">
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.Bidding)</div>
-																<div class="input">@Html.TextBoxFor(model => model.NewBidding.Bidding, new { @class = "s1", placeholder = "Bod" })</div>
-																<div class="clear"></div>
-																<br />
-														</li>
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingName)</div>
-																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingName, new { @class = "s5", placeholder = "Naam" })</div>
-																<div class="clear" />
-														</li>
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingStreet, "Adres")</div>
-																<div class="input">
-																		@Html.TextBoxFor(model => model.NewBidding.BiddingStreet, new { @class = "s4", placeholder = "Straat" })
-																		@Html.TextBoxFor(model => model.NewBidding.BiddingHouseNumber, new { @class = "s1", placeholder = "Huisnr" })
-																</div>
-																<div class="clear" />
-														</li>
-
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingZipCode, "Postcode / plaats")</div>
-																<div class="input">
-																		@Html.TextBoxFor(model => model.NewBidding.BiddingZipCode, new { @class = "s1", placeholder = "Postcode" })
-																		@Html.TextBoxFor(model => model.NewBidding.BiddingCity, new { @class = "s4", placeholder = "Plaats" })
-																</div>
-																<div class="clear" />
-														</li>
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingEmail)</div>
-																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingEmail, new { @class = "s5", placeholder = "E-mail", type = "email" })</div>
-																<div class="clear" />
-														</li>
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingPhoneNumber)</div>
-																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingPhoneNumber, new { @class = "s2", placeholder = "Telefoonnummer", type = "tel" })</div>
-																<div class="clear" />
-														</li>
-														<li>
-																<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingMobileNumber)</div>
-																<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingMobileNumber, new { @class = "s2", placeholder = "Mobiel nummer", type = "tel" })</div>
-																<div class="clear" />
-														</li>
-												</ul>												
+																		<li>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingZipCode, "Postcode / plaats")</div>
+																				<div class="input">
+																						@Html.TextBoxFor(model => model.NewBidding.BiddingZipCode, new { @class = "s1", placeholder = "Postcode" })
+																						@Html.TextBoxFor(model => model.NewBidding.BiddingCity, new { @class = "s4", placeholder = "Plaats" })
+																				</div>
+																				<div class="clear" />
+																		</li>
+																		<li>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingEmail)</div>
+																				<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingEmail, new { @class = "s5", placeholder = "E-mail", type = "email" })</div>
+																				<div class="clear" />
+																		</li>
+																		<li>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingPhoneNumber)</div>
+																				<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingPhoneNumber, new { @class = "s2", placeholder = "Telefoonnummer", type = "tel" })</div>
+																				<div class="clear" />
+																		</li>
+																		<li>
+																				<div class="label">@Html.LabelFor(model => model.NewBidding.BiddingMobileNumber)</div>
+																				<div class="input">@Html.TextBoxFor(model => model.NewBidding.BiddingMobileNumber, new { @class = "s2", placeholder = "Mobiel nummer", type = "tel" })</div>
+																				<div class="clear" />
+																		</li>
+																</ul>												
+														</div>
+												</div>
 										</div>
-								</div>
-						</div>
-						<div class="footer">
-								<div>
-										<div></div>
-								</div>
-						</div>
-						<div class="buttonbar">
-								<input type="submit" value="Bod uitbrengen" />
-						</div>
-				</div>		
-				@Html.ValidationSummary(false)
-	}
+										<div class="footer">
+												<div>
+														<div></div>
+												</div>
+										</div>
+										<div class="buttonbar">
+												<input type="submit" value="Bod uitbrengen" />
+										</div>
+								</div>		
+						}
+						@Html.ValidationSummary(false)						
+						<div class="clear"></div>
+				</div>				
+		}
+		<div class="clear"></div>
 </div>

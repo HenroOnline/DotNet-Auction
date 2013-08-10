@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Auction.Web.Models
 {
@@ -11,9 +12,11 @@ namespace Auction.Web.Models
 		{
 				public int Id { get; set; }
 
+				public string AuctionNumber { get; set; }
+
 				public string Title { get; set; }
 
-				public string Description { get; set; }
+				public MvcHtmlString Description { get; set; }
 
 				public decimal MinimumPrice { get; set; }
 
@@ -21,18 +24,22 @@ namespace Auction.Web.Models
 
 				public List<int> ImageFileAttachments { get; set; }
 
-				public List<AuctionItemBiddingModel> Biddings{get;set;}
+				public List<AuctionItemBiddingModel> Biddings { get; set; }
 
 				public AuctionItemBiddingModel NewBidding { get; set; }
+
+				public bool AuctionEndedMailSended { get; set; }
 
 				public AuctionItemDetailModel() { }
 
 				public AuctionItemDetailModel(AuctionItem auctionItem)
 				{
 						Id = auctionItem.Id;
+						AuctionNumber = auctionItem.AuctionNumber;
 						Title = auctionItem.Title;
-						Description = auctionItem.Description;
+						Description = new MvcHtmlString(auctionItem.Description.Replace(Environment.NewLine, "<br/>"));
 						MinimumPrice = auctionItem.MinimumPrice;
+						AuctionEndedMailSended = auctionItem.AuctionEndedMailSended;
 
 						ImageFileAttachments = new List<int>();
 						foreach (var fileAttachmentAuctionItem in FileAttachmentAuctionItemRepository.Instance.ListByAuctionItem(auctionItem.Id))
@@ -41,9 +48,9 @@ namespace Auction.Web.Models
 						}
 
 						Biddings = new List<AuctionItemBiddingModel>();
-						
+
 						AuctionItemBiddingRepository.Instance.ListByAuctionItem(auctionItem.Id).ForEach(b => Biddings.Add(new AuctionItemBiddingModel(b)));
-						
+
 						ImageFileAttachment = 0;
 						if (ImageFileAttachments.Count > 0)
 						{

@@ -1,12 +1,16 @@
 var Auction = Auction || {};
 
 Auction.overview = Auction.Overview || {
-		refresh: function () {
-				alert('adf');
-		}
+	
 };
 
 $(function () {
+		$.validator.methods.number = function (value, element) {
+				return this.optional(element) || !isNaN(Globalize.parseFloat(value));
+		}
+
+		Globalize.culture('nl-NL');
+		/*
 		var theWindow = $(window),
 				$bg = $("#bg"),
 				aspectRatio = $bg.width() / $bg.height();
@@ -26,4 +30,5 @@ $(function () {
 		}
 
 		theWindow.resize(resizeBg).trigger("resize");
+		*/
 });

@@ -12,8 +12,6 @@ namespace Auction.Web.Controllers
 {
 		public class AuctionController : Controller
 		{
-				//
-				// GET: /Home/
 				public ActionResult Index()
 				{
 						var data = AuctionItemRepository.Instance.ListOrderedByDate();
@@ -44,13 +42,25 @@ namespace Auction.Web.Controllers
 								if (ModelState.IsValidField("NewBidding.Bidding"))
 								{
 										// Check if minimum bid is reached
-										if (dalAuctionItem.MinimumPrice != 0 && auctionItem.NewBidding.Bidding > 0)
+										if (auctionItem.NewBidding.Bidding < dalAuctionItem.MinimumPrice)
 										{
-												if (auctionItem.NewBidding.Bidding < dalAuctionItem.MinimumPrice)
-												{
-														ModelState.AddModelError("NewBidding.Bidding", string.Format("Minimum prijs is: € {0}", dalAuctionItem.MinimumPrice));
-												}
+												ModelState.AddModelError("NewBidding.Bidding", string.Format("Bieding moet minimaal € {0} zijn", dalAuctionItem.MinimumPrice));
 										}
+										else
+										{
+												// Minimum bid is reached.. Now check if higher than highest bid so far
+												var highestBid = AuctionItemBiddingRepository.Instance.SelectHighest(auctionItem.Id);
+												decimal highestBidPrice = 0;
+												if (highestBid != null)
+												{
+														highestBidPrice = highestBid.Bidding;
+												}
+												if (auctionItem.NewBidding.Bidding <= highestBidPrice)
+												{
+														ModelState.AddModelError("NewBidding.Bidding", string.Format("Bieding moet hoger zijn dan € {0}", highestBidPrice));
+												}												
+										}
+
 								}
 
 								if (ModelState.IsValid)
@@ -101,6 +111,11 @@ namespace Auction.Web.Controllers
 						}
 
 						return View();
+				}
+
+				public void SendAuctionEndedMails()
+				{
+						MailHelper.SendAuctionEndedMails();
 				}
 		}
 }

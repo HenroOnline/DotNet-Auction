@@ -80,7 +80,7 @@ a:hover {
 .bgheight { height: 100%; }
 
 #wrapper {
-		margin-top: 10px;
+		margin-top: 20px;
 		margin-bottom: 20px;
 		position: relative;
 		
@@ -112,6 +112,27 @@ a:hover {
 		font-size: 75px;
 		font-weight: bold;
 		color: #FFFFFF;
+}
+
+@media all and (min-width: 620px) {
+		.header .small {
+				font-size: 26px;				
+		}
+
+		.header .large {
+				font-size: 75px;				
+		}
+}
+
+@media all and (max-width: 619px) {
+		.header .small {
+				font-size: 17px;				
+		}
+
+
+		.header .large {
+				font-size: 50px;				
+		}
 }
 
 ul.menu {
@@ -161,6 +182,12 @@ ul.menu li {
 		}
 }
 
+@media all and (max-width: 619px){
+		.lister div.item {				
+				margin-right: 0px;
+		}
+}
+
 .lister div.item img {
 		
 }
@@ -181,7 +208,13 @@ ul.menu li {
 		list-style-type: none;
 }
 
-.lister .item ul .label {		
+.lister .item ul, .detail .item ul {	
+		margin: 0px;
+		padding: 0px;
+		list-style-type: none;
+}
+
+.lister .item ul span.label, .detail .item ul span.label {		
 		display: inline-block;
 		width: 80px;
 }
@@ -190,28 +223,44 @@ ul.menu li {
 		padding-top: 10px;
 }
 
-@media all and (min-width: 970px) {
+@media all and (min-width: 970px) {		
 		.detail div.item {
 				float: left;
 				width: 475px;
 		}
 
-		.detail div.bidding, .detail div.newbid {
+		.detail .biddingcontainer {
 				float: right;
 				margin-left: 20px;
+				width: 475px;
 		}
 
-		.detail div.newbid {
+		.detail .biddingcontainer div.newbid {
 				margin-top: 20px;
 		}
 }
 
 @media all and (max-width: 969px) {
-		.detail div.item {
-				padding-top: 20px;
-				float: left;
-				margin-right: 20px;
+		.detail div.item {				
+				float: left;				
 				width: 475px;
+
+				margin-right: 20px;
+		}
+
+		.detail .biddingcontainer {
+				float: left;				
+				width: 475px;
+		}
+
+		.detail .biddingcontainer div.item {
+				padding-top: 20px;
+		}
+}
+
+@media all and (max-width: 949px) {
+		.detail div.item {				
+				margin-right: 0px;
 		}
 }
 

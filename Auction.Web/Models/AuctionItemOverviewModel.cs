@@ -12,6 +12,8 @@ namespace Auction.Web.Models
 		{
 				public int Id { get; set; }
 
+				public string AuctionNumber { get; set; }
+
 				private DateTime Date { get; set; }
 
 				public string DateFormatted
@@ -66,6 +68,7 @@ namespace Auction.Web.Models
 				public AuctionItemOverviewModel(AuctionItem auctionItem)
 				{
 						Id = auctionItem.Id;
+						AuctionNumber = auctionItem.AuctionNumber;
 						Date = auctionItem.Date;
 						Title = auctionItem.Title;
 						VenderZipCode = auctionItem.VendorZipCode;
