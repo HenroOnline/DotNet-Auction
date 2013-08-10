@@ -31,6 +31,11 @@ namespace Auction.BLL
 						get { return GetConfigValue("DataRootFolder"); }
 				}
 
+				public static string AccountNumber
+				{
+						get { return GetConfigValue("AccountNumber"); }
+				}
+
 				public static class Auction
 				{
 						public static int DaysValid
@@ -38,6 +43,57 @@ namespace Auction.BLL
 								get
 								{
 										return GetConfigValueAsInteger("Auction.DaysValid", 14);
+								}
+						}
+				}
+
+				public static class Mail
+				{
+						public static string SmtpHostname
+						{
+								get
+								{
+										return GetConfigValue("Mail.SmtpHostname");
+								}
+						}
+
+						public static int SmtpPortnumber
+						{
+								get
+								{
+										return GetConfigValueAsInteger("Mail.SmtpPortnumber");
+								}
+						}
+
+						public static string SmtpUsername
+						{
+								get
+								{
+										return GetConfigValue("Mail.SmtpUsername");
+								}
+						}
+
+						public static string SmtpPassword
+						{
+								get
+								{
+										return GetConfigValue("Mail.SmtpPassword");
+								}
+						}
+
+						public static string SenderAddress
+						{
+								get
+								{
+										return GetConfigValue("Mail.SenderAddress");
+								}
+						}
+
+						public static string AdminAddress
+						{
+								get
+								{
+										return GetConfigValue("Mail.AdminAddress");
 								}
 						}
 				}
