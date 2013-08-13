@@ -1,4 +1,5 @@
 ﻿using Auction.BLL.Repositories;
+using Auction.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Auction.BLL
 {
@@ -69,76 +71,125 @@ namespace Auction.BLL
 
 						foreach (var auctionItem in auctionItems)
 						{
-								var highestBid = AuctionItemBiddingRepository.Instance.SelectHighest(auctionItem.Id);
-
+								try
 								{
-										var messageToVendor = new StringBuilder();
-										messageToVendor.Append(string.Format("Beste {0},<br/>", auctionItem.VendorName));
-										messageToVendor.Append("<br/>");
-										messageToVendor.Append(string.Format("De veiling voor veiling item {0}, {1} is stopgezet.<br/><br/>", auctionItem.AuctionNumber, auctionItem.Title));
+										var highestBid = AuctionItemBiddingRepository.Instance.SelectHighest(auctionItem.Id);
+										{
+												var messageToVendor = new StringBuilder();
+												messageToVendor.Append(string.Format("Beste {0},<br/>", auctionItem.VendorName));
+												messageToVendor.Append("<br/>");
+												messageToVendor.Append(string.Format("De veiling voor veiling item {0}, {1} is stopgezet.<br/><br/>", auctionItem.AuctionNumber, auctionItem.Title));
+
+												if (highestBid != null)
+												{
+														messageToVendor.Append(string.Format("De hoogste bieder met een bedrag van € {0} is:<br/>", highestBid.Bidding));
+														messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingName));
+														messageToVendor.Append(string.Format("{0} {1}<br/>", highestBid.BiddingStreet, highestBid.BiddingHouseNumber));
+														messageToVendor.Append(string.Format("{0} {1}<br/>", highestBid.BiddingZipCode, highestBid.BiddingCity));
+														messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingEmail));
+
+														if (!string.IsNullOrEmpty(highestBid.BiddingPhoneNumber))
+														{
+																messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingPhoneNumber));
+														}
+
+														if (!string.IsNullOrEmpty(highestBid.BiddingMobileNumber))
+														{
+																messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingMobileNumber));
+														}
+												}
+												else
+												{
+														messageToVendor.Append("Er zijn geen biedingen uitgebracht.<br/>");
+												}
+
+												messageToVendor.Append("<br/>");
+												messageToVendor.Append("Mvg,<br/><br/>");
+												messageToVendor.Append("Veiling Hervormd Rouveen");
+
+												Send(Config.Mail.SenderAddress, auctionItem.VendorEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToVendor.ToString());
+										}
 
 										if (highestBid != null)
 										{
-												messageToVendor.Append(string.Format("De hoogste bieder met een bedrag van € {0} is:<br/>", highestBid.Bidding));
-												messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingName));
-												messageToVendor.Append(string.Format("{0} {1}<br/>", highestBid.BiddingStreet, highestBid.BiddingHouseNumber));
-												messageToVendor.Append(string.Format("{0} {1}<br/>", highestBid.BiddingZipCode, highestBid.BiddingCity));
-												messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingEmail));
+												var messageToBidder = new StringBuilder();
 
-												if (!string.IsNullOrEmpty(highestBid.BiddingPhoneNumber))
+												messageToBidder.Append(string.Format("Beste {0},<br/>", highestBid.BiddingName));
+												messageToBidder.Append("<br/>");
+												messageToBidder.Append(string.Format("De veiling voor veiling item {0}, {1} is stopgezet.<br/>", auctionItem.AuctionNumber, auctionItem.Title));
+												messageToBidder.Append("U bent de hoogste bieder.<br/>");
+												messageToBidder.Append("<br/>");
+												messageToBidder.Append(string.Format("Wanneer u het bedrag van € {0} overgemaakt heeft op rekeningnummer {1} onder vermelding van {2} kunt u het veiling item ophalen op onderstaand adres.<br/><br/>", highestBid.Bidding, Config.AccountNumber, auctionItem.AuctionNumber));
+												messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorName));
+												messageToBidder.Append(string.Format("{0} {1}<br/>", auctionItem.VendorStreet, auctionItem.VendorHouseNumber));
+												messageToBidder.Append(string.Format("{0} {1}<br/>", auctionItem.VendorZipCode, auctionItem.VendorCity));
+												messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorEmail));
+												if (!string.IsNullOrEmpty(auctionItem.VendorPhoneNumber))
 												{
-														messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingPhoneNumber));
+														messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorPhoneNumber));
 												}
 
-												if (!string.IsNullOrEmpty(highestBid.BiddingMobileNumber))
+												if (!string.IsNullOrEmpty(auctionItem.VendorMobileNumber))
 												{
-														messageToVendor.Append(string.Format("{0}<br/>", highestBid.BiddingMobileNumber));
+														messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorMobileNumber));
 												}
-										}
-										else
-										{
-												messageToVendor.Append("Er zijn geen biedingen uitgebracht.<br/>");
+												messageToBidder.Append("<br/>");
+												messageToBidder.Append("Mvg,<br/><br/>");
+												messageToBidder.Append("Veiling Hervormd Rouveen");
+
+												Send(Config.Mail.SenderAddress, highestBid.BiddingEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToBidder.ToString());
 										}
 
-										messageToVendor.Append("<br/>");
-										messageToVendor.Append("Mvg,<br/><br/>");
-										messageToVendor.Append("Veiling Hervormd Rouveen");
-
-										Send(Config.Mail.SenderAddress, auctionItem.VendorEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToVendor.ToString());
+										auctionItem.AuctionEndedMailSended = true;
+										AuctionItemRepository.Instance.Save(auctionItem);
 								}
-
-								if (highestBid != null)
+								catch (Exception ex)
 								{
-										var messageToBidder = new StringBuilder();
+										LogHelper.LogEvent(ex);
+								}
+						}
+				}
 
-										messageToBidder.Append(string.Format("Beste {0},<br/>", highestBid.BiddingName));
-										messageToBidder.Append("<br/>");
-										messageToBidder.Append(string.Format("De veiling voor veiling item {0}, {1} is stopgezet.<br/>", auctionItem.AuctionNumber, auctionItem.Title));
-										messageToBidder.Append("U bent de hoogste bieder.<br/>");
-										messageToBidder.Append("<br/>");
-										messageToBidder.Append(string.Format("Wanneer u het bedrag van € {0} overgemaakt heeft op rekeningnummer {1} onder vermelding van {2} kunt u het veiling item ophalen op onderstaand adres.<br/><br/>", highestBid.Bidding, Config.AccountNumber, auctionItem.AuctionNumber));
-										messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorName));
-										messageToBidder.Append(string.Format("{0} {1}<br/>", auctionItem.VendorStreet, auctionItem.VendorHouseNumber));
-										messageToBidder.Append(string.Format("{0} {1}<br/>", auctionItem.VendorZipCode, auctionItem.VendorCity));
-										messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorEmail));
-										if (!string.IsNullOrEmpty(auctionItem.VendorPhoneNumber))
-										{
-												messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorPhoneNumber));
-										}
+				public static void SendNewBidMails(int auctionItemId, string newBidEmailAddress)
+				{
+						var auctionItem = AuctionItemRepository.Instance.Select(auctionItemId);
 
-										if (!string.IsNullOrEmpty(auctionItem.VendorMobileNumber))
-										{
-												messageToBidder.Append(string.Format("{0}<br/>", auctionItem.VendorMobileNumber));
-										}
-										messageToBidder.Append("<br/>");
-										messageToBidder.Append("Mvg,<br/><br/>");
-										messageToBidder.Append("Veiling Hervormd Rouveen");
+						if (auctionItem == null)
+						{
+								return;
+						}
 
-										Send(Config.Mail.SenderAddress, highestBid.BiddingEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToBidder.ToString());
-								}							
+						var itemBiddings = from aib in AuctionItemBiddingRepository.Instance.ListByAuctionItem(auctionItem.Id)
+															 where !aib.BiddingEmail.Equals(newBidEmailAddress, StringComparison.InvariantCultureIgnoreCase)
+														   group aib by aib.BiddingEmail
+																		into result
+																		select new 
+																		{ 
+																				BiddingEmail = result.Key,
+																				BiddingName = (from aib2 in result select aib2.BiddingName).Max()
+																		};	
 
-								auctionItem.AuctionEndedMailSended = true;
-								AuctionItemRepository.Instance.Save(auctionItem);
+						foreach (var itemBiddingToNotify in itemBiddings)
+						{
+								try
+								{
+										var messageToPreviousBidders = new StringBuilder();
+
+										messageToPreviousBidders.Append(string.Format("Beste {0},<br/>", itemBiddingToNotify.BiddingName));
+										messageToPreviousBidders.Append("<br/>");
+										messageToPreviousBidders.Append(string.Format("Uw bod op veiling item {0}, {1} is overboden.<br/>", auctionItem.AuctionNumber, auctionItem.Title));
+										messageToPreviousBidders.Append("<br/>");
+										messageToPreviousBidders.Append(string.Format("Klik <a href=\"{0}/Auction/Detail/{1}\">hier</a> om naar de veiling site te gaan.<br/>", HttpContext.Current.Request.Url.Host, auctionItem.Id));
+										messageToPreviousBidders.Append("<br/>");
+										messageToPreviousBidders.Append("Mvg,<br/><br/>");
+										messageToPreviousBidders.Append("Veiling Hervormd Rouveen");
+
+										Send(Config.Mail.SenderAddress, itemBiddingToNotify.BiddingEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToPreviousBidders.ToString());
+								}
+								catch (Exception ex)
+								{
+										LogHelper.LogEvent(ex);
+								}
 						}
 				}
 		}

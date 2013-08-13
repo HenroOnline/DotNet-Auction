@@ -1,49 +1,54 @@
 ﻿@model List<Auction.Web.Models.AuctionItemOverviewModel>
 <div class="lister">
-	@foreach (var item in Model)
+	@if(Model.Count > 0)
 	{
-				<div class="item">
-						<div class="header">
-								<div>
+			foreach (var item in Model)
+			{
+						<div class="item">
+								<div class="header">
 										<div>
-												<span class="description"><a href="@Url.Action("Detail", new { id = @item.Id })">@item.Title</a></span>
-										</div>
-								</div>
-						</div>
-						<div class="data">
-								<div>
-										<div>
-												<div class="image">
-														<a href="@Url.Action("Detail", new { id = @item.Id })">
-																<img src="@item.ImageUrl" alt="@item.Title" /></a>
+												<div>
+														<span class="description"><a href="@Url.Action("Detail", new { id = @item.Id })">@item.Title</a></span>
 												</div>
-												<ul>
-														<li>
-																<span class="label">Veilingnummer:</span>
-																<strong>@item.AuctionNumber</strong>
-														</li>
-														<li>
-																<span class="label">Geplaatst op:</span>
-																<strong>@item.DateFormatted</strong>
-														</li>
-														<li>
-																<span class="label">Hoogste bod:</span>
-																@item.HighestBiddingAsString
-														</li>
-														<li>
-																<span class="label">Locatie:</span>
-																<strong>@item.VenderZipCode @item.VendorCity</strong>
-														</li>
-												</ul>
 										</div>
 								</div>
-						</div>
-						<div class="footer">
-								<div>
-										<div></div>
+								<div class="data">
+										<div>
+												<div>
+														<div class="image">
+																<a href="@Url.Action("Detail", new { id = @item.Id })">
+																		<img src="@item.ImageUrl" alt="@item.Title" /></a>
+														</div>
+														<ul>
+																<li>
+																		<span class="label">Veilingnummer:</span>
+																		<strong>@item.AuctionNumber</strong>
+																</li>
+																<li>
+																		<span class="label">Geplaatst op:</span>
+																		<strong>@item.DateFormatted</strong>
+																</li>
+																<li>
+																		<span class="label">Hoogste bod:</span>
+																		@item.HighestBiddingAsString
+																</li>
+																<li>
+																		<span class="label">Locatie:</span>
+																		<strong>@item.VenderZipCode @item.VendorCity</strong>
+																</li>
+														</ul>
+												</div>
+										</div>
 								</div>
-						</div>
-				</div>        
+								<div class="footer">
+										<div>
+												<div></div>
+										</div>
+								</div>
+						</div>        
+			}
+	} else {
+		<p>Op dit moment zijn er geen veiling items beschikbaar</p>	
 	}
-		<div class="clear"></div>
+	<div class="clear"></div>
 </div>

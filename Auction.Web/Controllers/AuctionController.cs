@@ -41,32 +41,33 @@ namespace Auction.Web.Controllers
 
 								if (ModelState.IsValidField("NewBidding.Bidding"))
 								{
-										// Check if minimum bid is reached
-										if (auctionItem.NewBidding.Bidding < dalAuctionItem.MinimumPrice)
+										var highestBid = AuctionItemBiddingRepository.Instance.SelectHighest(auctionItem.Id);
+										if (highestBid != null)
 										{
-												ModelState.AddModelError("NewBidding.Bidding", string.Format("Bieding moet minimaal € {0} zijn", dalAuctionItem.MinimumPrice));
+												// Now check if higher than highest bid so far												
+												if (auctionItem.NewBidding.Bidding <= highestBid.Bidding)
+												{
+														ModelState.AddModelError("NewBidding.Bidding", string.Format("Bieding moet hoger zijn dan € {0}", highestBid.Bidding));
+												}
 										}
 										else
 										{
-												// Minimum bid is reached.. Now check if higher than highest bid so far
-												var highestBid = AuctionItemBiddingRepository.Instance.SelectHighest(auctionItem.Id);
-												decimal highestBidPrice = 0;
-												if (highestBid != null)
-												{
-														highestBidPrice = highestBid.Bidding;
-												}
-												if (auctionItem.NewBidding.Bidding <= highestBidPrice)
-												{
-														ModelState.AddModelError("NewBidding.Bidding", string.Format("Bieding moet hoger zijn dan € {0}", highestBidPrice));
-												}												
-										}
+												// Check if minimum bid is reached
+												var minimumBidToUse = Math.Max(dalAuctionItem.MinimumPrice, (decimal)0.01);
 
+												if (auctionItem.NewBidding.Bidding < minimumBidToUse)
+												{
+														ModelState.AddModelError("NewBidding.Bidding", string.Format("Bieding moet minimaal € {0} zijn", minimumBidToUse));
+												}
+										}
 								}
 
 								if (ModelState.IsValid)
 								{
 										var dalEntity = auctionItem.NewBidding.ToDalEntity(auctionItem.Id);
 										AuctionItemBiddingRepository.Instance.Save(dalEntity);
+
+										MailHelper.SendNewBidMails(auctionItem.Id, dalEntity.BiddingEmail);
 
 										return RedirectToAction("Detail", new { id = auctionItem.Id });
 								}
