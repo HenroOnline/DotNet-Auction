@@ -91,7 +91,7 @@ namespace Auction.Web.Models
 						result.BiddingCity = BiddingCity;
 						result.BiddingEmail = BiddingEmail;
 						result.BiddingPhoneNumber = BiddingPhoneNumber;
-						result.BiddingMobileNumber = BiddingPhoneNumber;
+						result.BiddingMobileNumber = BiddingMobileNumber;
 
 						return result;
 				}
