@@ -1,6 +1,7 @@
 ﻿using Auction.BLL;
 using Auction.BLL.Repositories;
 using Auction.DAL.Entities;
+using Auction.Web.Hubs;
 using Auction.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,8 @@ namespace Auction.Web.Controllers
 								{
 										var dalEntity = auctionItem.NewBidding.ToDalEntity(auctionItem.Id);
 										AuctionItemBiddingRepository.Instance.Save(dalEntity);
+
+										AuctionHub.UpdateAuctionHighestBid(auctionItem.Id, dalEntity.Date, dalEntity.Bidding);
 
 										MailHelper.SendNewBidMails(auctionItem.Id, dalEntity.BiddingEmail);
 

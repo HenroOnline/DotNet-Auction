@@ -33,22 +33,34 @@
 						});
 				});
 
-				$(function () {
-						$("#NewBidding_Bidding").change(function () {
-								var sender = $(this);
-								sender.val(sender.val().replace(/\./g, ','));
-						});
-
-						$("form").validate();
-						$("form").on("submit", function (e) {
-								var isValid = $(this).valid();
-								if (isValid) {
-										if (!confirm("Bod wordt nu geplaatst, doorgaan?")) {
-												e.preventDefault();
-										}
-								}
-						});
+				$("#NewBidding_Bidding").change(function () {
+						var sender = $(this);
+						sender.val(sender.val().replace(/\./g, ','));
 				});
+
+				$("form").validate();
+				$("form").on("submit", function (e) {
+						var isValid = $(this).valid();
+						if (isValid) {
+								if (!confirm("Bod wordt nu geplaatst, doorgaan?")) {
+										e.preventDefault();
+								}
+						}
+				});
+
+				// Reference the auto-generated proxy for the hub.  
+				var auctionHub = $.connection.auctionHub;
+
+				// Create a function that the hub can call back to display new data.
+				auctionHub.client.updateAuctionHighestBid = function (auctionItemId, biddingDate, highestBid) {
+						var bidOverview = $("ul[data-auctionitem=" + auctionItemId + "]");
+						
+						if (bidOverview.length > 0) {
+								bidOverview.prepend('<li><div class="label"><strong>&euro;&nbsp;' + highestBid + '</strong></div><span>' + biddingDate + '</span></li>');
+						}
+				};
+
+				$.connection.hub.start();
 		});
 </script>
 <div class="detail">
@@ -120,9 +132,11 @@
 										<div>
 												<div>
 														@if(Model.Biddings.Count == 0) {
-																<span>Er zijn nog geen biedingen uitgebracht</span>
+																<ul class="biddingoverview" data-auctionitem="@Model.Id">
+																		<li>Er zijn nog geen biedingen uitgebracht</li>
+																</ul>
 														}else{
-																<ul class="biddingoverview">
+																<ul class="biddingoverview" data-auctionitem="@Model.Id">
 																		@foreach(var currentBid in Model.Biddings)
 																		{
 																				<li>
