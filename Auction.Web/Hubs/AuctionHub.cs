@@ -21,9 +21,19 @@ namespace Auction.Web.Hubs
 						}
 				}
 
+				public void Join(int auctionItemId)
+				{
+						var groupKey = (auctionItemId != 0) ? string.Format("AuctionItem_{0}", auctionItemId) : "AuctionOverview";
+						Groups.Add(Context.ConnectionId, groupKey);
+				}
+
 				public static void UpdateAuctionHighestBid(int auctionItemId, DateTime biddingDate, decimal highestBid)
 				{
-						Instance.Clients.All.updateAuctionHighestBid(auctionItemId, biddingDate.ToString("dd-MM-yyyy HH:mm"), highestBid.ToString("0.00"));
+						// Send message to all clients which are viewing the overview
+						Instance.Clients.Group("AuctionOverview").updateAuctionHighestBid(auctionItemId, highestBid.ToString("0.00"));
+
+						// Send message to all clients which are viewing detail page
+						Instance.Clients.Group(string.Format("AuctionItem_{0}", auctionItemId)).updateAuctionBiddings(biddingDate.ToString("dd-MM-yyyy"), highestBid.ToString("0.00"));
 				}
 		}
 }

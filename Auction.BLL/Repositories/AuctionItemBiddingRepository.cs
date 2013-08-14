@@ -15,8 +15,19 @@ namespace Auction.BLL.Repositories
 														.Where(t => t.AuctionItemId == auctionItemId)
 														.OrderByDescending(t => t.Bidding)
 														.Take(1)														
-														.FirstOrDefault();
-														
+														.FirstOrDefault();														
+				}
+
+				public AuctionItemBidding SelectPreviousHighestBid(int auctionItemId)
+				{
+						var result = ListByAuctionItem(auctionItemId);
+
+						if (result.Count > 1)
+						{
+								return result[1];
+						}
+
+						return null;
 				}
 
 				public List<AuctionItemBidding> ListByAuctionItem(int auctionItemId)

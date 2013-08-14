@@ -6,14 +6,16 @@
 				var auctionHub = $.connection.auctionHub;
 				
 				// Create a function that the hub can call back to display new data.
-				auctionHub.client.updateAuctionHighestBid = function (auctionItemId, biddingDate, highestBid) {						
+				auctionHub.client.updateAuctionHighestBid = function (auctionItemId, highestBid) {						
 						var auctionItem = $("span[data-auctionitem=" + auctionItemId + "]");
 						if (auctionItem.length > 0) {
 								auctionItem.html("<strong>&euro;&nbsp;" + highestBid + "</strong>");
 						} 
 				};
 
-				$.connection.hub.start();
+				$.connection.hub.start(function () {
+						auctionHub.server.join(0);
+				});
 		});
 </script>
 <div class="lister">

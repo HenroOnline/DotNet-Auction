@@ -3,23 +3,26 @@
 		function ChangeMainPicture(fileattachmentId) {
 				$("#mainimage").animate({ opacity: 0 }, function () {
 						var newImageUrl = "/FileAttachment/" + fileattachmentId + "?MaxHeight=461&MaxWidth=461";
+
+						/*
 						var preloadImage = new $('<img src="' + newImageUrl + '" style="display: none;" />');
 						$("body").append(preloadImage);
+						*/
 
 						var mainImageElement = $(this);
 
 						mainImageElement.height(mainImageElement.height() + "px");
 						mainImageElement.width(mainImageElement.width() + "px");
-						preloadImage.load(function () {
-								mainImageElement.attr("src", newImageUrl);
-								mainImageElement.animate(
-										{
-												opacity: 1,
-												width: $(this).width() + "px",
-												height: $(this).height() + "px"
-										}, 1000);
-								$(this).remove();
-						});
+						//preloadImage.load(function () {
+						mainImageElement.attr("src", newImageUrl);
+						mainImageElement.animate(
+								{
+										opacity: 1,
+										width: $(this).width() + "px",
+										height: $(this).height() + "px"
+								}, 1000);
+						//		$(this).remove();
+						//});
 				});
 
 				$parentLink = $("#mainimage").closest("a");
@@ -52,15 +55,20 @@
 				var auctionHub = $.connection.auctionHub;
 
 				// Create a function that the hub can call back to display new data.
-				auctionHub.client.updateAuctionHighestBid = function (auctionItemId, biddingDate, highestBid) {
-						var bidOverview = $("ul[data-auctionitem=" + auctionItemId + "]");
+				auctionHub.client.updateAuctionBiddings = function (biddingDate, highestBid) {
+						var bidOverview = $("ul[data-auctionbiddingoverview]");
 						
 						if (bidOverview.length > 0) {
+								// If there was no bidding, remove no data placeholder
+								$("li[data-nodataplaceholder]", bidOverview).remove();
+
 								bidOverview.prepend('<li><div class="label"><strong>&euro;&nbsp;' + highestBid + '</strong></div><span>' + biddingDate + '</span></li>');
 						}
 				};
 
-				$.connection.hub.start();
+				$.connection.hub.start(function () {
+						auctionHub.server.join(@Model.Id);
+				});
 		});
 </script>
 <div class="detail">
@@ -132,11 +140,11 @@
 										<div>
 												<div>
 														@if(Model.Biddings.Count == 0) {
-																<ul class="biddingoverview" data-auctionitem="@Model.Id">
-																		<li>Er zijn nog geen biedingen uitgebracht</li>
+																<ul class="biddingoverview" data-auctionbiddingoverview="">
+																		<li data-nodataplaceholder="">Er zijn nog geen biedingen uitgebracht</li>
 																</ul>
 														}else{
-																<ul class="biddingoverview" data-auctionitem="@Model.Id">
+																<ul class="biddingoverview" data-auctionbiddingoverview="">
 																		@foreach(var currentBid in Model.Biddings)
 																		{
 																				<li>

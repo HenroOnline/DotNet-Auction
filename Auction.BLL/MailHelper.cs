@@ -159,37 +159,31 @@ namespace Auction.BLL
 								return;
 						}
 
-						var itemBiddings = from aib in AuctionItemBiddingRepository.Instance.ListByAuctionItem(auctionItem.Id)
-															 where !aib.BiddingEmail.Equals(newBidEmailAddress, StringComparison.InvariantCultureIgnoreCase)
-														   group aib by aib.BiddingEmail
-																		into result
-																		select new 
-																		{ 
-																				BiddingEmail = result.Key,
-																				BiddingName = (from aib2 in result select aib2.BiddingName).Max()
-																		};	
-
-						foreach (var itemBiddingToNotify in itemBiddings)
+						var previousHighestBid = AuctionItemBiddingRepository.Instance.SelectPreviousHighestBid(auctionItemId);
+						if (previousHighestBid == null || previousHighestBid.BiddingEmail.Equals(newBidEmailAddress, StringComparison.InvariantCultureIgnoreCase))
 						{
-								try
-								{
-										var messageToPreviousBidders = new StringBuilder();
+								// Highest bidder keeps the same.. No need to notify
+								return;
+						}
 
-										messageToPreviousBidders.Append(string.Format("Beste {0},<br/>", itemBiddingToNotify.BiddingName));
-										messageToPreviousBidders.Append("<br/>");
-										messageToPreviousBidders.Append(string.Format("Uw bod op veiling item {0}, {1} is overboden.<br/>", auctionItem.AuctionNumber, auctionItem.Title));
-										messageToPreviousBidders.Append("<br/>");
-										messageToPreviousBidders.Append(string.Format("Klik <a href=\"{0}/Auction/Detail/{1}\">hier</a> om naar de veiling site te gaan.<br/>", HttpContext.Current.Request.Url.Host, auctionItem.Id));
-										messageToPreviousBidders.Append("<br/>");
-										messageToPreviousBidders.Append("Mvg,<br/><br/>");
-										messageToPreviousBidders.Append("Veiling Hervormd Rouveen");
+						try
+						{
+								var messageToPreviousBidders = new StringBuilder();
 
-										Send(Config.Mail.SenderAddress, itemBiddingToNotify.BiddingEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToPreviousBidders.ToString());
-								}
-								catch (Exception ex)
-								{
-										LogHelper.LogEvent(ex);
-								}
+								messageToPreviousBidders.Append(string.Format("Beste {0},<br/>", previousHighestBid.BiddingName));
+								messageToPreviousBidders.Append("<br/>");
+								messageToPreviousBidders.Append(string.Format("Uw bod op veiling item {0}, {1} is overboden.<br/>", auctionItem.AuctionNumber, auctionItem.Title));
+								messageToPreviousBidders.Append("<br/>");
+								messageToPreviousBidders.Append(string.Format("Klik <a href=\"{0}/Auction/Detail/{1}\">hier</a> om naar de veiling site te gaan.<br/>", HttpContext.Current.Request.Url.Host, auctionItem.Id));
+								messageToPreviousBidders.Append("<br/>");
+								messageToPreviousBidders.Append("Mvg,<br/><br/>");
+								messageToPreviousBidders.Append("Veiling Hervormd Rouveen");
+
+								Send(Config.Mail.SenderAddress, previousHighestBid.BiddingEmail, string.Format("Veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToPreviousBidders.ToString());
+						}
+						catch (Exception ex)
+						{
+								LogHelper.LogEvent(ex);
 						}
 				}
 		}

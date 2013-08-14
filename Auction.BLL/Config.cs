@@ -36,6 +36,22 @@ namespace Auction.BLL
 						get { return GetConfigValue("AccountNumber"); }
 				}
 
+				public static string GoogleTrackingId
+				{
+						get
+						{
+								return GetConfigValue("GoogleTrackingId");
+						}
+				}
+
+				public static string GoogleTrackingName
+				{
+						get
+						{
+								return GetConfigValue("GoogleTrackingName");
+						}
+				}
+
 				public static class Auction
 				{
 						public static int DaysValid
