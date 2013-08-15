@@ -33,7 +33,7 @@ namespace Auction.Web.Hubs
 						Instance.Clients.Group("AuctionOverview").updateAuctionHighestBid(auctionItemId, highestBid.ToString("0.00"));
 
 						// Send message to all clients which are viewing detail page
-						Instance.Clients.Group(string.Format("AuctionItem_{0}", auctionItemId)).updateAuctionBiddings(biddingDate.ToString("dd-MM-yyyy"), highestBid.ToString("0.00"));
+						Instance.Clients.Group(string.Format("AuctionItem_{0}", auctionItemId)).updateAuctionBiddings(biddingDate.ToString("dd-MM-yyyy HH:mm"), highestBid.ToString("0.00"));
 				}
 		}
 }

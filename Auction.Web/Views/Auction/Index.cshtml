@@ -13,7 +13,14 @@
 						} 
 				};
 
-				$.connection.hub.start(function () {
+				var userAgent = window.navigator.userAgent;
+				var transport = 'auto';
+				if (/iP(hone|od|ad)/.test(userAgent)) {
+
+						transport = 'longPolling';
+				}
+
+				$.connection.hub.start({ transport: transport }, function () {
 						auctionHub.server.join(0);
 				});
 		});

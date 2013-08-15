@@ -1,32 +1,24 @@
 ﻿@model Auction.Web.Models.AuctionItemDetailModel
 <script type="text/javascript">
 		function ChangeMainPicture(fileattachmentId) {
+				
+				$("#mainimage").stop(true, true);
 				$("#mainimage").animate({ opacity: 0 }, function () {
 						var newImageUrl = "/FileAttachment/" + fileattachmentId + "?MaxHeight=461&MaxWidth=461";
-
-						/*
-						var preloadImage = new $('<img src="' + newImageUrl + '" style="display: none;" />');
-						$("body").append(preloadImage);
-						*/
-
 						var mainImageElement = $(this);
 
 						mainImageElement.height(mainImageElement.height() + "px");
 						mainImageElement.width(mainImageElement.width() + "px");
-						//preloadImage.load(function () {
+						
 						mainImageElement.attr("src", newImageUrl);
+						mainImageElement.css('height', 'auto');
+						mainImageElement.css('width', 'auto');
+
 						mainImageElement.animate(
 								{
-										opacity: 1,
-										width: $(this).width() + "px",
-										height: $(this).height() + "px"
-								}, 1000);
-						//		$(this).remove();
-						//});
+										opacity: 1
+								}, 1000);						
 				});
-
-				$parentLink = $("#mainimage").closest("a");
-				$parentLink.attr("href", "/FileAttachment/" + fileattachmentId);
 		}
 
 		$(function () {
@@ -51,6 +43,7 @@
 						}
 				});
 
+				
 				// Reference the auto-generated proxy for the hub.  
 				var auctionHub = $.connection.auctionHub;
 
@@ -66,7 +59,15 @@
 						}
 				};
 
-				$.connection.hub.start(function () {
+
+				var userAgent = window.navigator.userAgent;
+				var transport = 'auto';
+				if (/iP(hone|od|ad)/.test(userAgent)) {
+						
+						transport = 'longPolling';
+				}
+
+				$.connection.hub.start({ transport: transport }, function () {
 						auctionHub.server.join(@Model.Id);
 				});
 		});

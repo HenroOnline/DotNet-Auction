@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,12 @@ namespace Auction.Web
 		{
 				protected void Application_Start()
 				{
+						// https://github.com/SignalR/SignalR/issues/1406
+						// Fix for IOS
+						// On safari we must use a sort of longpolling.
+						// If we don't do this we cannot load aditional resources (like images) because connection is in use
+						GlobalHost.Configuration.ConnectionTimeout = TimeSpan.FromSeconds(1);
+						Microsoft.AspNet.SignalR.Transports.LongPollingTransport.LongPollDelay = 5000;
 						RouteTable.Routes.MapHubs();
 
 						AreaRegistration.RegisterAllAreas();
