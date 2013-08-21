@@ -54,8 +54,7 @@ namespace Auction.DAL
 				protected static AuctionContext CreateContext()
 				{
 						var result = new AuctionContext();
-						//Database.SetInitializer<AuctionContext>(new AuctionInitializer());
-						Database.SetInitializer<AuctionContext>(null);
+						Database.SetInitializer<AuctionContext>(new AuctionInitializer());						
 						return result;
 				}
 
