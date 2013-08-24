@@ -70,6 +70,7 @@ namespace Auction.Web.Controllers
 
 										AuctionHub.UpdateAuctionHighestBid(auctionItem.Id, dalEntity.Date, dalEntity.Bidding);
 
+										MailHelper.SendBidConfirmationMail(dalEntity.Id);
 										MailHelper.SendNewBidMails(auctionItem.Id, dalEntity.BiddingEmail);
 
 										return RedirectToAction("Detail", new { id = auctionItem.Id });

@@ -186,5 +186,38 @@ namespace Auction.BLL
 								LogHelper.LogEvent(ex);
 						}
 				}
+
+				public static void SendBidConfirmationMail(int auctionItemBiddingId)
+				{
+						var auctionItemBidding = AuctionItemBiddingRepository.Instance.Select(auctionItemBiddingId);
+						if (auctionItemBidding == null)
+						{
+								return;
+						}
+
+						var auctionItem = AuctionItemRepository.Instance.Select(auctionItemBidding.AuctionItemId);
+						if (auctionItem == null)
+						{
+								return;
+						}
+
+						try
+						{
+								var messageToBidder = new StringBuilder();
+
+								messageToBidder.Append(string.Format("Beste {0},<br/>", auctionItemBidding.BiddingName));
+								messageToBidder.Append("<br/>");
+								messageToBidder.Append(string.Format("Hierbij de bevestiging van uw bod van € {0} op veiling item {1}, {2}.<br/>", auctionItemBidding.Bidding, auctionItem.AuctionNumber, auctionItem.Title));
+								messageToBidder.Append("<br/>");								
+								messageToBidder.Append("Mvg,<br/><br/>");
+								messageToBidder.Append("Veiling Hervormd Rouveen");
+
+								Send(Config.Mail.SenderAddress, auctionItemBidding.BiddingEmail, string.Format("Bevestiging bieding op veiling item {0}, {1}", auctionItem.AuctionNumber, auctionItem.Title), messageToBidder.ToString());
+						}
+						catch (Exception ex)
+						{
+								LogHelper.LogEvent(ex);
+						}
+				}
 		}
 }
