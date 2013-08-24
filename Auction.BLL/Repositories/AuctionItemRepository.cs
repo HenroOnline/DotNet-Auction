@@ -18,6 +18,7 @@ namespace Auction.BLL.Repositories
 
 						return result.Where(ai => ai.ModifiedKind != "D")	
 												 .Where(ai => !onlyNotExpiredItems || ai.Date.Date.AddDays(daysValid) >= currentDate)
+												 .Where(ai => ai.AuctionEndedMailSended == false)
 												 .OrderByDescending(ai => ai.Date).ToList();
 				}
 
