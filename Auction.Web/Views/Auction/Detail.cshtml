@@ -7,6 +7,9 @@
 						var newImageUrl = "/FileAttachment/" + fileattachmentId + "?MaxHeight=461&MaxWidth=461";
 						var mainImageElement = $(this);
 
+						var zoomImage = mainImageElement.closest("a");						
+						zoomImage.attr("href", "/FileAttachment/" + fileattachmentId);
+
 						mainImageElement.height(mainImageElement.height() + "px");
 						mainImageElement.width(mainImageElement.width() + "px");
 						
