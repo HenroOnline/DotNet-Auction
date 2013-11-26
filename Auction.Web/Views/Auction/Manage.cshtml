@@ -1,0 +1,197 @@
+﻿@model Auction.Web.Models.AuctionItemManageModel
+<script type="text/javascript">
+	function ChangeMainPicture(fileattachmentId) {
+
+		$("#mainimage").stop(true, true);
+		$("#mainimage").animate({ opacity: 0 }, function () {
+			var newImageUrl = "/FileAttachment/" + fileattachmentId + "?MaxHeight=461&MaxWidth=461";
+			var mainImageElement = $(this);
+
+			var zoomImage = mainImageElement.closest("a");
+			zoomImage.attr("href", "/FileAttachment/" + fileattachmentId);
+
+			mainImageElement.height(mainImageElement.height() + "px");
+			mainImageElement.width(mainImageElement.width() + "px");
+
+			mainImageElement.attr("src", newImageUrl);
+			mainImageElement.css('height', 'auto');
+			mainImageElement.css('width', 'auto');
+
+			mainImageElement.animate(
+					{
+						opacity: 1
+					}, 1000);
+		});
+	}
+
+	$(function () {
+		$("a[data-fileattachmentid]").each(function () {
+			$(this).click(function () {
+				ChangeMainPicture($(this).attr("data-fileattachmentid"));
+			});
+		});
+
+		$("#NewBidding_Bidding").change(function () {
+			var sender = $(this);
+			sender.val(sender.val().replace(/\./g, ','));
+		});
+
+		$("form").validate();
+		$("form").on("submit", function (e) {
+			var biddingCount = @Model.Biddings.Count;
+			var question;
+			if (biddingCount > 0) {
+				question = "Weet u zeker dat u de veiling wilt stopzetten?";
+			}
+			else
+			{
+				question = "Er zijn nog geen biedingen uitgebracht, weet u zeker dat u de veiling wilt stopzetten?";
+			}
+
+			if (!confirm(question)) {
+				e.preventDefault();
+			}
+		});
+
+
+		// Reference the auto-generated proxy for the hub.
+		var auctionHub = $.connection.auctionHub;
+
+		// Create a function that the hub can call back to display new data.
+		auctionHub.client.updateAuctionBiddings = function (biddingDate, highestBid) {
+			var bidOverview = $("ul[data-auctionbiddingoverview]");
+
+			if (bidOverview.length > 0) {
+				// If there was no bidding, remove no data placeholder
+				$("li[data-nodataplaceholder]", bidOverview).remove();
+
+				bidOverview.prepend('<li><div class="label"><strong>&euro;&nbsp;' + highestBid + '</strong></div><span>' + biddingDate + '</span></li>');
+			}
+		};
+
+
+		var userAgent = window.navigator.userAgent;
+		var transport = 'auto';
+		if (/iP(hone|od|ad)/.test(userAgent)) {
+
+			transport = 'longPolling';
+		}
+
+		$.connection.hub.start({ transport: transport }, function () {
+			auctionHub.server.join(@Model.Id);
+		});
+	});
+</script>
+<div class="detail">
+	@using (Html.BeginForm("Manage", "Auction", FormMethod.Post))
+	{
+		<input type="hidden" name="Id" value="@Model.Id" />
+		@Html.AntiForgeryToken()
+		<div class="item">
+			<div class="header">
+				<div>
+					<div>
+						<span class="description">@Model.Title</span>
+					</div>
+				</div>
+			</div>
+			<div class="data">
+				<div>
+					<div>
+						<div class="image">
+							<a href="/FileAttachment/@Model.ImageFileAttachment" target="_blank">
+								<img src="/FileAttachment/@Model.ImageFileAttachment?MaxHeight=461&MaxWidth=461" alt="@Model.Title" id="mainimage" />
+							</a>
+						</div>
+						@if (@Model.ImageFileAttachments.Count > 1)
+						{
+							<div class="carrousel">
+								@foreach (var fileAttachmentId in @Model.ImageFileAttachments)
+								{
+									<div class="image">
+										<a href="javascript: void(0);" data-fileattachmentid="@fileAttachmentId">
+											<img src="/FileAttachment/@fileAttachmentId?MaxHeight=75&MaxWidth=75" alt="@Model.Title" />
+										</a>
+									</div>
+								}
+								<div class="clear"></div>
+							</div>
+						}
+						<ul>
+							<li>
+								<span class="label">Veilingnummer:</span>
+								<strong>@Model.AuctionNumber</strong>
+							</li>
+							@if (Model.MinimumPrice != 0)
+							{
+								<li>
+									<span class="label">Minimum prijs:</span>
+									<strong>&euro;&nbsp;@Model.MinimumPrice</strong>
+								</li>
+							}
+						</ul>
+						<br />
+						@Model.Description
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<div class="biddingcontainer">
+			<div class="item bidding">
+				<div class="header">
+					<div>
+						<div>
+							<span class="description">Biedingen</span>
+						</div>
+					</div>
+				</div>
+				<div class="data">
+					<div>
+						<div>
+							@if (Model.Biddings.Count == 0)
+							{
+								<ul class="biddingoverview" data-auctionbiddingoverview="">
+									<li data-nodataplaceholder="">Er zijn nog geen biedingen uitgebracht</li>
+								</ul>
+							}
+							else
+							{
+								<ul class="biddingoverview" data-auctionbiddingoverview="">
+									@foreach (var currentBid in Model.Biddings)
+									{
+										<li>
+											<div class="label"><strong>&euro;&nbsp;@currentBid.Bidding</strong></div>
+											<span>@currentBid.DateFormatted</span>
+										</li>
+									}
+								</ul>
+							}
+						</div>
+					</div>
+				</div>
+				<div class="footer">
+					<div>
+						<div></div>
+					</div>
+				</div>
+				<div class="buttonbar">
+					@if (!Model.Ended)
+					{
+						<input type="submit" value="Veiling stopzetten" />
+					}
+					else
+					{
+						<p><strong>Veiling is stopgezet!</strong></p>
+					}
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	}
+	<div class="clear"></div>
+</div>

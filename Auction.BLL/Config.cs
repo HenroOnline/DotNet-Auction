@@ -52,17 +52,6 @@ namespace Auction.BLL
 						}
 				}
 
-				public static class Auction
-				{
-						public static int DaysValid
-						{
-								get
-								{
-										return GetConfigValueAsInteger("Auction.DaysValid", 14);
-								}
-						}
-				}
-
 				public static class Mail
 				{
 						public static string SmtpHostname

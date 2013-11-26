@@ -7,32 +7,37 @@ using System.Threading.Tasks;
 
 namespace Auction.BLL.Repositories
 {
-		public class AuctionItemRepository : BaseRepository<AuctionItem, AuctionItemRepository>
+	public class AuctionItemRepository : BaseRepository<AuctionItem, AuctionItemRepository>
+	{
+		public AuctionItem Select(Guid uniqueKey)
 		{
-				public List<AuctionItem> ListOrderedByDate(bool onlyNotExpiredItems = true)
-				{						
-						var result = List();
-
-						var currentDate = DateTime.Now.Date;
-						var daysValid = Config.Auction.DaysValid;
-
-						return result.Where(ai => ai.ModifiedKind != "D")	
-												 .Where(ai => !onlyNotExpiredItems || ai.Date.Date.AddDays(daysValid) >= currentDate)
-												 .Where(ai => ai.AuctionEndedMailSended == false)
-												 .OrderByDescending(ai => ai.Date).ToList();
-				}
-
-				public List<AuctionItem> ListExpiredWithNoMailSended()
-				{
-						var result = List();
-
-						var currentDate = DateTime.Now.Date;
-						var daysValid = Config.Auction.DaysValid;
-
-						return result.Where(ai => ai.ModifiedKind != "D")
-												 .Where(ai => ai.Date.Date.AddDays(daysValid) < currentDate)
-												 .Where(ai => ai.AuctionEndedMailSended == false)
-												 .OrderByDescending(ai => ai.Date).ToList();
-				}
+			return this.Context.Set<AuctionItem>().FirstOrDefault(a => a.UniqueKey == uniqueKey
+																														&& a.ModifiedKind != "D");
 		}
+
+		public List<AuctionItem> ListOrderedByDate()
+		{
+			var result = List();
+
+			var currentDate = DateTime.Now.Date;
+
+			return result.Where(ai => ai.ModifiedKind != "D")
+									 .Where(ai => ai.Ended == false)
+									 .OrderByDescending(ai => ai.Date).ToList();
+		}
+
+		public void EndAuction(int auctionId)
+		{
+			var data = Select(auctionId);
+			if (data == null || data.Ended)
+			{
+				return;
+			}
+
+			data.Ended = true;
+			data.EndedDate = DateTime.Now;
+
+			Save(data);
+		}
+	}
 }

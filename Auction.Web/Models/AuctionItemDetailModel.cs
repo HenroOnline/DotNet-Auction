@@ -28,7 +28,7 @@ namespace Auction.Web.Models
 
 				public AuctionItemBiddingModel NewBidding { get; set; }
 
-				public bool AuctionEndedMailSended { get; set; }
+				public bool Ended { get; set; }
 
 				public AuctionItemDetailModel() { }
 
@@ -39,8 +39,8 @@ namespace Auction.Web.Models
 						Title = auctionItem.Title;
 						Description = new MvcHtmlString(auctionItem.Description.Replace(Environment.NewLine, "<br/>"));
 						MinimumPrice = auctionItem.MinimumPrice;
-						AuctionEndedMailSended = auctionItem.AuctionEndedMailSended;
-
+						Ended = auctionItem.Ended;
+					
 						ImageFileAttachments = new List<int>();
 						foreach (var fileAttachmentAuctionItem in FileAttachmentAuctionItemRepository.Instance.ListByAuctionItem(auctionItem.Id))
 						{
