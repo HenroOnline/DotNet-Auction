@@ -22,7 +22,7 @@ namespace Auction.DAL
 						set;
 				}
 
-				public DbSet<AuctionItem> AuctionItems { get; set; }				
+				public DbSet<AuctionItem> AuctionItems { get; set; }
 
 				private static AuctionContext _instance;
 				public static AuctionContext Instance

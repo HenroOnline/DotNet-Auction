@@ -24,6 +24,7 @@ namespace Auction.BLL
 			{
 				smtpClient.Credentials = new NetworkCredential(Config.Mail.SmtpUsername, Config.Mail.SmtpPassword);
 			}
+			smtpClient.EnableSsl = Config.Mail.SmtpEnableSsl;
 
 			var mailMessage = new MailMessage(from, to, subject, body);
 			mailMessage.IsBodyHtml = true;
